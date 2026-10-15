@@ -146,12 +146,21 @@ body {
 .menu__label { display: block; font-weight: 500; font-size: 14px; }
 .menu__meta { display: block; color: var(--color-text-secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
 
-.matrix { display: grid; gap: var(--space-xs); overflow-x: auto; }
-.matrix__row {
+.page > * { min-width: 0; }
+
+.matrix {
   display: grid;
-  grid-template-columns: minmax(200px, 1.4fr) repeat(3, minmax(190px, 1fr));
+  /* One grid for the whole table: every column sizes to its widest chip, so nothing overlaps */
+  grid-template-columns: repeat(4, max-content);
+  column-gap: var(--space-xl);
+  justify-content: start;
+  overflow-x: auto;
+}
+.matrix__row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
   align-items: center;
-  gap: var(--space-md);
   padding: var(--space-xs) 0;
   border-bottom: 1px solid var(--color-border-subtle);
 }
@@ -177,7 +186,24 @@ body {
 }
 .page__footer { color: var(--color-text-secondary); font-size: 13px; }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .page { padding-top: var(--space-xl); }
   .page__header h1 { font-size: 32px; line-height: 40px; }
+  .panel { padding: var(--space-md); }
+
+  /* Every state: one card per state, chips wrap under the label */
+  .matrix { display: block; }
+  .matrix__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-sm);
+    padding: var(--space-md) 0;
+  }
+  .matrix__label { flex: 1 0 100%; color: var(--color-text-secondary); }
+  .matrix__row .na { display: none; }
+  .matrix__row.matrix__head { display: none; }
+
+  .row { gap: var(--space-sm); }
+  .row__label { width: 72px; }
+  .menu { width: min(280px, calc(100vw - 2 * var(--layout-screen-margin))); }
 }
