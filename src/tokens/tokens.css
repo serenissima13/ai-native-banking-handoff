@@ -7,10 +7,11 @@
  * Three tiers, one direction of reference:
  *   Component (--parameter-chip-*)  →  Semantic (--color-*, --space-*…)  →  Primitives (raw values)
  *
- * Two fixes applied while exporting (also flagged in docs/HANDOFF.md):
- *   1. radius/full exists as a Primitive AND a Semantic token with the same code syntax (--radius-full),
- *      which would make the Semantic one reference itself. The Primitive is emitted here as --radius-999.
- *   2. opacity/40 is stored as 40 (percent) in Figma; CSS opacity needs 0–1, so it is emitted as 0.4.
+ * Export rule: Figma stores opacity variables as 0–100 (that is what layer opacity expects);
+ * CSS needs 0–1, so opacity values are divided by 100 on export.
+ *
+ * Re-exported after the handoff fixes in Figma (15 Oct 2026): radius/full primitive renamed radius/999,
+ * new tokens for the Missing border (1.5) and the Editing inset (6). No hand corrections left in this file.
  */
 
 /* Tier 1 · Primitives */
@@ -40,6 +41,7 @@
   --space-0: 0px;
   --space-2: 2px;
   --space-4: 4px;
+  --space-6: 6px;
   --space-8: 8px;
   --space-12: 12px;
   --space-16: 16px;
@@ -56,14 +58,15 @@
   --radius-16: 16px;
   --radius-24: 24px;
   --radius-32: 32px;
-  --radius-999: 999px; /* Figma: radius/full (Primitives) — renamed, see fix 1 */
+  --radius-999: 999px;
   --size-16: 16px;
   --size-20: 20px;
   --size-24: 24px;
   --size-44: 44px;
   --border-width-1: 1px;
+  --border-width-1-5: 1.5px;
   --border-width-2: 2px;
-  --opacity-40: 0.4; /* Figma stores 40 — see fix 2 */
+  --opacity-40: 0.4; /* Figma: 40 — opacity is divided by 100 on export */
   --color-ink-0: #ffffff;
   --color-ink-50: #f5f8fb;
   --color-ink-100: #eaeff5;
@@ -132,6 +135,7 @@
   --space-3xl: var(--space-40);
   --space-4xl: var(--space-48);
   --space-5xl: var(--space-64);
+  --space-inset-nested: var(--space-6); /* control nested in a 44 px control: (44 − 32) / 2 */
   --layout-screen-margin: var(--space-24);
   --layout-section-gap: var(--space-32);
   --radius-none: var(--radius-0);
@@ -147,6 +151,7 @@
   --size-icon-md: var(--size-20);
   --size-icon-lg: var(--size-24);
   --border-width-default: var(--border-width-1);
+  --border-width-medium: var(--border-width-1-5);
   --border-width-strong: var(--border-width-2);
   --focus-ring-width: var(--border-width-2);
   --focus-ring-gap: var(--space-2);
@@ -324,6 +329,8 @@
   --parameter-chip-gap: var(--space-xs);
   --parameter-chip-border-width: var(--border-width-default);
   --parameter-chip-border-width-strong: var(--border-width-strong);
+  --parameter-chip-border-width-missing: var(--border-width-medium);
+  --parameter-chip-padding-right-editing: var(--space-inset-nested);
   --parameter-chip-icon: var(--color-icon-secondary);
   --parameter-chip-bg-pressed: var(--color-surface-sunken);
   --parameter-chip-focus-ring: var(--color-focus-ring);

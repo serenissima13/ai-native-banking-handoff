@@ -33,7 +33,7 @@ Open the address it prints (usually http://localhost:5173). `npm run build` type
 
 The templates (`*.figma.ts`) tell Figma's Dev Mode which code to show for each ParameterChip instance, prop by prop.
 
-Publishing needs a Figma **Organization or Enterprise** plan, the component published to a team library, and a personal access token with Code Connect write scope.
+Publishing needs a Figma **Organization or Enterprise** plan, the component published to a team library, and a personal access token with Code Connect write scope. The challenge file is on a Professional plan, so the templates are validated but not published; the same mapping is in [docs/HANDOFF.md](docs/HANDOFF.md) and in the component's description in Figma.
 
 ```bash
 export FIGMA_ACCESS_TOKEN=your-token   # never commit it

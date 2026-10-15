@@ -1,7 +1,6 @@
 /*
  * ParameterChip · every value comes from a Component token (--parameter-chip-*),
  * which resolves through Semantic tokens, so Light and Dark need no extra CSS.
- * Two values are not tokenised in Figma yet and are marked TOKEN-GAP (see docs/HANDOFF.md).
  */
 .pchip {
   /* Defaults = State=Confirmed */
@@ -62,7 +61,7 @@
 .pchip[data-state='missing'] {
   --_bg: var(--parameter-chip-missing-bg);
   --_border: var(--parameter-chip-missing-border);
-  --_border-width: 1.5px; /* TOKEN-GAP: Figma uses a raw 1.5 stroke */
+  --_border-width: var(--parameter-chip-border-width-missing);
   --_fg: var(--parameter-chip-missing-fg);
   --_icon: var(--parameter-chip-missing-icon);
 }
@@ -121,7 +120,7 @@ button.pchip:active { --_bg: var(--parameter-chip-bg-pressed); }
   --_border: var(--parameter-chip-editing-border);
   --_border-width: var(--parameter-chip-border-width-strong);
   --_fg: var(--parameter-chip-editing-fg);
-  padding-right: 6px; /* TOKEN-GAP: Figma uses a raw 6 on the right while editing */
+  padding-right: var(--parameter-chip-padding-right-editing);
   cursor: text;
 }
 

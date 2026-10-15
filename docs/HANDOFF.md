@@ -75,19 +75,27 @@ Every value comes from a Component token, which resolves through Semantic tokens
 | Icons | `--parameter-chip-icon` · `-missing-icon` · `-output-icon` |
 | Pressed · Open · Focus | `--parameter-chip-bg-pressed` · `-open-border` · `-focus-ring` · `-focus-ring-offset` |
 | Editing | `--parameter-chip-editing-{bg,border,fg,caret,clear,confirm-bg,confirm-fg}` |
+| Missing border · Editing inset | `--parameter-chip-border-width-missing` (1.5) · `--parameter-chip-padding-right-editing` (6) |
 | Text | `label/md` → Geist Medium 14/20 |
 | Glass (Assumed, Missing) | `glass/thin` → blur 12 · inner highlight · drop shadow 0 4 16 |
 
-## Found while handing off
+## Found while handing off — and fixed
 
-Moving the component to code surfaced six things the Figma file does not say on its own:
+Moving the component to code surfaced six things the Figma file did not say on its own. They were fixed at the source, in Figma, and the tokens re-exported: `tokens.css` now needs no hand corrections.
 
-1. **Code-syntax collision.** `radius/full` exists as a Primitive and a Semantic token with the same code syntax `--radius-full`, so in CSS the Semantic one would reference itself. Exported the Primitive as `--radius-999`. *Fix in Figma: give the Primitive its own code syntax.*
-2. **Opacity in percent.** `opacity/40` is stored as `40`; CSS needs `0.4`. *Fix in Figma: store opacities as 0–1, or note the unit in the code syntax.*
-3. **Token gap · Missing border.** Figma uses a raw 1.5 stroke, between `border-width/1` and `/2`. Kept as `1.5px`, marked `TOKEN-GAP`.
-4. **Token gap · Editing padding.** A raw 6 on the right while editing. Kept as `6px`, marked `TOKEN-GAP`.
-5. **Dashes.** Figma's dash pattern is 4/3; CSS `dashed` is close but browser-defined. Exact dashes would need an SVG border — not worth it for this component.
-6. **Pressed and Focused are not props.** In Figma they are variants so they can be shown; in code they are browser states (`:active`, `:focus-visible`). The Code Connect template maps them to nothing on purpose.
+| # | Finding | Resolution |
+|---|---|---|
+| 1 | **Code-syntax collision.** `radius/full` was both a Primitive and a Semantic token with the code syntax `--radius-full`, so in CSS the Semantic one referenced itself. | **Fixed in Figma.** Primitive renamed `radius/999` (`--radius-999`), like the other value-named primitives. |
+| 2 | **Opacity units.** `opacity/40` is `40` in Figma; CSS needs `0.4`. | **By design.** Figma's layer opacity expects 0–100, so the variable stays 40. The export divides opacity by 100 — written as a rule in `tokens.css`. |
+| 3 | **Token gap · Missing border.** A raw 1.5 px stroke. | **Fixed in Figma.** `border-width/1-5` → `border-width/medium` → `parameter-chip/border-width-missing`, bound on Missing (Default, Pressed, Focused). |
+| 4 | **Token gap · Editing inset.** A raw 6 px right padding. | **Fixed in Figma.** `space/6` → `space/inset-nested` ((44 − 32) / 2) → `parameter-chip/padding-right-editing`, bound on the four Editing variants. |
+| 5 | **Dashes.** Figma's 4/3 dash vs CSS `dashed`. | **Accepted.** Close enough; an SVG border is not worth it here. |
+| 6 | **Pressed and Focused are not props.** | **By design.** Variants in Figma so they can be shown; browser states in code. Code Connect maps them to nothing. |
+
+Two more surfaced while fixing these, and were fixed too:
+
+- The 2 px stroke on **Open** and **Editing** was a raw value; now bound to `parameter-chip/border-width-strong` (8 variants).
+- The **Output** variant's value was a fixed text ("I'll calculate"), so instances could not show the calculated amount; it is now linked to the **Value** property.
 
 ## Code Connect
 
@@ -104,4 +112,4 @@ Dev Mode then shows, for an instance set to *Assumed · Default · date icon*:
 />
 ```
 
-Publishing: see the README. Needs an Organization or Enterprise plan and the component published to a library.
+**Status:** the templates are validated with `npx figma connect parse`. Publishing to Dev Mode needs an Organization or Enterprise plan; this file is on a Professional plan, so the mapping lives here, in the repository and in the component's description in Figma (which also links to the source, this spec and the demo).
