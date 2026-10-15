@@ -131,7 +131,7 @@ export function ParameterChip({
         {state === 'missing' ? placeholder : value}
       </span>
       {tag && (
-        <span className="pchip__tag" aria-hidden="true">
+        <span className="pchip__tag text-caption" aria-hidden="true">
           {tag}
         </span>
       )}

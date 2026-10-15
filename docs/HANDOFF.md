@@ -61,10 +61,13 @@ Editing replaces value + tag + affordance with: input · ✕ clear (32 px) · �
 - Focus ring: 2 px offset + 2 px ring from `--parameter-chip-focus-ring*` (WCAG 2.4.7). Same ring shown while Open and Editing.
 - Touch target: min-height 44 px. Clear and confirm while editing are 32 px — above WCAG 2.5.8 (24 px), below this system's own 44 px rule.
 - Numbers use tabular figures; `prefers-reduced-motion` turns transitions off.
+- Chrome draws the Missing border's 1.5 px as 1 px (it snaps borders to whole pixels). Missing still reads as Missing: placeholder text, brand-coloured edge and icon.
 
 ## Tokens
 
-Every value comes from a Component token, which resolves through Semantic tokens, so **Light and Dark need no extra CSS**.
+Every value comes from the design system — Component tokens, Semantic tokens, and the Figma text and effect styles — so **Light and Dark need no extra CSS**. Derived sizes are calculated from tokens (the 32 px editing buttons are `height-min − 2 × padding-right-editing`; the focus ring is `focus/ring-gap` + `focus/ring-width`). The only code-only values are motion durations (the system has no motion tokens yet) and tabular figures (not readable from a Figma text style).
+
+**Pipeline:** `scripts/figma-export/export-tokens.js` runs inside Figma and writes `tokens/figma-tokens.json`; `npm run tokens` turns it into `src/tokens/tokens.css` and `styles.css`. The CSS is generated, never edited by hand.
 
 | Part | Token |
 |---|---|
@@ -76,8 +79,9 @@ Every value comes from a Component token, which resolves through Semantic tokens
 | Pressed · Open · Focus | `--parameter-chip-bg-pressed` · `-open-border` · `-focus-ring` · `-focus-ring-offset` |
 | Editing | `--parameter-chip-editing-{bg,border,fg,caret,clear,confirm-bg,confirm-fg}` |
 | Missing border · Editing inset | `--parameter-chip-border-width-missing` (1.5) · `--parameter-chip-padding-right-editing` (6) |
-| Text | `label/md` → Geist Medium 14/20 |
-| Glass (Assumed, Missing) | `glass/thin` → blur 12 · inner highlight · drop shadow 0 4 16 |
+| Text | `.text-label-md` (Geist Medium 14/20) · tag `.text-caption` (Medium 12/16) |
+| Glass (Assumed, Missing) | `--effect-glass-thin-blur` · `--effect-glass-thin-shadow` (Figma effect style glass/thin) |
+| Focus ring | `--focus-ring-gap` + `--focus-ring-width`, colours `--parameter-chip-focus-ring(-offset)` |
 
 ## Found while handing off — and fixed
 

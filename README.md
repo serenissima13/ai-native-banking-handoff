@@ -11,8 +11,10 @@ The **ParameterChip** from the WIT Software design challenge, built in React + T
 
 | Path | What it is |
 |---|---|
-| `src/tokens/tokens.css` | Design tokens exported from the Figma variables, three tiers: Primitives → Semantic (Light and Dark) → Component. Names come from each variable's code syntax in Figma. |
-| `src/tokens/styles.css` | The Figma text style `label/md` and effect style `glass/thin`, written as CSS. |
+| `tokens/figma-tokens.json` | The design tokens as exported from Figma: variables (three tiers, Light and Dark), text styles and effect styles. |
+| `src/tokens/*.css` | **Generated** from that JSON by `npm run tokens` — never edited by hand. |
+| `scripts/figma-export/` | The exporter that runs inside Figma (as a development plugin, or through the Figma MCP). |
+| `scripts/build-tokens.mjs` | JSON → CSS. Names from each variable's code syntax; the only rules it applies are written at the top. |
 | `src/components/ParameterChip/` | The component, its CSS (tokens only) and its Code Connect template. |
 | `src/components/Icon/` | The icons the chip uses, exported from Figma as SVG, with one Code Connect template per leading icon. |
 | `src/App.tsx` | A demo: the chip in context (the "what I understood" step) and every state, in Dark and Light. |
@@ -28,6 +30,14 @@ npm run dev
 ```
 
 Open the address it prints (usually http://localhost:5173). `npm run build` type-checks and builds to `dist/`.
+
+## Tokens: from Figma to code
+
+1. **Export** — in Figma desktop: *Plugins → Development → Import plugin from manifest…* → `scripts/figma-export/manifest.json` → run **Export tokens** and paste the JSON into `tokens/figma-tokens.json`. (An AI agent with the Figma MCP can run the same `exportTokens()` function.)
+2. **Build** — `npm run tokens` regenerates `src/tokens/tokens.css` and `styles.css`.
+3. **Ship** — commit and push; the demo redeploys.
+
+A design change in Figma reaches the live demo without editing a line of CSS.
 
 ## Code Connect
 

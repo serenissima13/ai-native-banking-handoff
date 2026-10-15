@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "tokens": "node scripts/build-tokens.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "figma:publish": "figma connect publish",

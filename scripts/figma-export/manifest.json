@@ -1,0 +1,8 @@
+{
+  "name": "Export tokens · AI-native banking handoff",
+  "id": "ai-native-banking-export-tokens",
+  "api": "1.0.0",
+  "main": "export-tokens.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page"
+}
