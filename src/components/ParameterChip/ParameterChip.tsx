@@ -91,9 +91,11 @@ export function ParameterChip({
   // Output: the assistant's own number — shown, never edited.
   if (state === 'output') {
     return (
-      <span className={classes} data-state="output" aria-label={accessibleName(parameter, value, state)}>
+      <span className={classes} data-state="output">
         <Icon name="sparkle" className="pchip__icon" />
         <span className="pchip__value text-label-md" aria-hidden="true">{value}</span>
+        {/* A plain span cannot carry aria-label (axe: aria-prohibited-attr), so the name is visually hidden text */}
+        <span className="pchip__sr-only">{accessibleName(parameter, value, state)}</span>
       </span>
     )
   }

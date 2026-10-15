@@ -61,6 +61,7 @@ Editing replaces value + tag + affordance with: input · ✕ clear (32 px) · �
 - Focus ring: 2 px offset + 2 px ring from `--parameter-chip-focus-ring*` (WCAG 2.4.7). Same ring shown while Open and Editing.
 - Touch target: min-height 44 px. Clear and confirm while editing are 32 px — above WCAG 2.5.8 (24 px), below this system's own 44 px rule.
 - Numbers use tabular figures; `prefers-reduced-motion` turns transitions off.
+- **Automated check:** axe-core 4.10, WCAG 2.2 A/AA, on the demo in Dark and Light × rest, open and editing — **0 violations** in all six runs. It found two, now fixed: the Output chip carried `aria-label` on a plain `<span>` (now visually hidden text), and the demo menu's secondary text fell to 4.1:1 on the selected tint in Dark. Contrast on translucent glass is reported as "needs review" (axe cannot compute it through a blur); those pairs are covered by the contrast matrix in Figma (03 Foundations).
 - Chrome draws the Missing border's 1.5 px as 1 px (it snaps borders to whole pixels). Missing still reads as Missing: placeholder text, brand-coloured edge and icon.
 
 ## Tokens

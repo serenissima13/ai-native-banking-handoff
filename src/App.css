@@ -142,6 +142,8 @@ body {
   cursor: pointer;
 }
 .menu__option[aria-checked='true'] { background: var(--color-glass-tint-brand); color: var(--color-text-brand); }
+/* secondary text on the selected tint fell to 4.1:1 in Dark (axe) — primary keeps it above 4.5:1 */
+.menu__option[aria-checked='true'] .menu__meta { color: var(--color-text-primary); }
 .menu__option:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: -2px; }
 .menu__label { display: block; font-weight: 500; font-size: 14px; }
 .menu__meta { display: block; color: var(--color-text-secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
