@@ -1,0 +1,174 @@
+/*
+ * ParameterChip · every value comes from a Component token (--parameter-chip-*),
+ * which resolves through Semantic tokens, so Light and Dark need no extra CSS.
+ * Two values are not tokenised in Figma yet and are marked TOKEN-GAP (see docs/HANDOFF.md).
+ */
+.pchip {
+  /* Defaults = State=Confirmed */
+  --_bg: var(--parameter-chip-confirmed-bg);
+  --_border: var(--parameter-chip-confirmed-border);
+  --_border-width: var(--parameter-chip-border-width);
+  --_border-style: solid;
+  --_fg: var(--parameter-chip-confirmed-fg);
+  --_icon: var(--parameter-chip-icon);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--parameter-chip-gap);
+  min-height: var(--parameter-chip-height-min);
+  padding: 0 var(--parameter-chip-padding-x);
+  border-radius: var(--parameter-chip-radius);
+  border: var(--_border-width) var(--_border-style) var(--_border);
+  background: var(--_bg);
+  color: var(--_fg);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.pchip__icon {
+  display: inline-flex;
+  color: var(--_icon);
+}
+
+.pchip__affordance {
+  color: var(--parameter-chip-icon);
+  transition: transform 160ms ease-out;
+}
+
+.pchip__tag {
+  padding: 0 var(--space-2xs);
+  border-radius: var(--radius-xs);
+  background: var(--_tag-bg);
+  color: var(--_tag-fg);
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+/* ── State ─────────────────────────────────────────────── */
+.pchip[data-state='assumed'] {
+  --_bg: var(--parameter-chip-assumed-bg);
+  --_border: var(--parameter-chip-assumed-border);
+  --_border-style: dashed; /* Figma dash 4/3 — CSS dashes are close, not identical */
+  --_fg: var(--parameter-chip-assumed-fg);
+  --_tag-bg: var(--parameter-chip-assumed-tag-bg);
+  --_tag-fg: var(--parameter-chip-assumed-tag-fg);
+}
+
+.pchip[data-state='missing'] {
+  --_bg: var(--parameter-chip-missing-bg);
+  --_border: var(--parameter-chip-missing-border);
+  --_border-width: 1.5px; /* TOKEN-GAP: Figma uses a raw 1.5 stroke */
+  --_fg: var(--parameter-chip-missing-fg);
+  --_icon: var(--parameter-chip-missing-icon);
+}
+
+.pchip[data-state='output'] {
+  --_bg: var(--parameter-chip-output-bg);
+  --_border: var(--parameter-chip-output-border);
+  --_fg: var(--parameter-chip-output-fg);
+  --_icon: var(--parameter-chip-output-icon);
+  cursor: default;
+}
+.pchip[data-state='output'] .pchip__icon { color: var(--_icon); }
+
+.pchip[data-state='edited'] {
+  --_bg: var(--parameter-chip-edited-bg);
+  --_border: var(--parameter-chip-edited-border);
+  --_fg: var(--parameter-chip-edited-fg);
+  --_tag-bg: var(--parameter-chip-edited-tag-bg);
+  --_tag-fg: var(--parameter-chip-edited-tag-fg);
+}
+
+/* Glass (Figma effect style glass/thin) on the translucent states */
+.pchip[data-state='assumed'],
+.pchip[data-state='missing'] {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 0 var(--color-glass-highlight),
+    0 4px 16px 0 var(--color-glass-shadow);
+}
+
+/* ── Interaction ───────────────────────────────────────── */
+/* Pressed */
+button.pchip:active { --_bg: var(--parameter-chip-bg-pressed); }
+
+/* Focused · 2 px offset + 2 px ring (Figma: two spreads, 2 and 4), WCAG 2.4.7 */
+.pchip:focus-visible,
+.pchip[data-open],
+.pchip[data-editing] {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--parameter-chip-focus-ring-offset),
+    0 0 0 4px var(--parameter-chip-focus-ring);
+}
+
+/* Open · a menu is anchored below; the chevron flips */
+.pchip[data-open] {
+  --_border: var(--parameter-chip-open-border);
+  --_border-width: var(--parameter-chip-border-width-strong);
+}
+.pchip[data-open] .pchip__affordance { transform: rotate(180deg); }
+
+/* Editing · the chip becomes the field */
+.pchip[data-editing] {
+  --_bg: var(--parameter-chip-editing-bg);
+  --_border: var(--parameter-chip-editing-border);
+  --_border-width: var(--parameter-chip-border-width-strong);
+  --_fg: var(--parameter-chip-editing-fg);
+  padding-right: 6px; /* TOKEN-GAP: Figma uses a raw 6 on the right while editing */
+  cursor: text;
+}
+
+.pchip__input {
+  min-width: 4ch;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--_fg);
+  caret-color: var(--parameter-chip-editing-caret);
+  outline: none;
+}
+
+.pchip__clear,
+.pchip__confirm {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+.pchip__clear {
+  background: transparent;
+  color: var(--parameter-chip-editing-clear);
+}
+.pchip__confirm {
+  background: var(--parameter-chip-editing-confirm-bg);
+  color: var(--parameter-chip-editing-confirm-fg);
+}
+.pchip__clear:focus-visible,
+.pchip__confirm:focus-visible {
+  outline: 2px solid var(--parameter-chip-focus-ring);
+  outline-offset: 2px;
+}
+
+.pchip__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pchip,
+  .pchip__affordance { transition: none; }
+}

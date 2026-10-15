@@ -1,0 +1,13 @@
+{
+  "codeConnect": {
+    "parser": "react",
+    "include": [
+      "src/**/*.figma.ts"
+    ],
+    "label": "React",
+    "language": "tsx",
+    "documentUrlSubstitutions": {
+      "<FIGMA_FILE>": "https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking"
+    }
+  }
+}

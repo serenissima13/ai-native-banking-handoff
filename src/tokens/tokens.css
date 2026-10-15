@@ -1,0 +1,360 @@
+/*
+ * Design tokens · AI-native mobile banking
+ * Generated from the Figma variables (file oYKI1xZAtJvaO62wPJhN8L) using each variable's WEB code syntax.
+ * Scope: the full Semantic tier (Light + Dark), every Primitive it references,
+ * and the Component tier for ParameterChip.
+ *
+ * Three tiers, one direction of reference:
+ *   Component (--parameter-chip-*)  →  Semantic (--color-*, --space-*…)  →  Primitives (raw values)
+ *
+ * Two fixes applied while exporting (also flagged in docs/HANDOFF.md):
+ *   1. radius/full exists as a Primitive AND a Semantic token with the same code syntax (--radius-full),
+ *      which would make the Semantic one reference itself. The Primitive is emitted here as --radius-999.
+ *   2. opacity/40 is stored as 40 (percent) in Figma; CSS opacity needs 0–1, so it is emitted as 0.4.
+ */
+
+/* Tier 1 · Primitives */
+:root {
+  --color-green-50: #e9fded;
+  --color-green-300: #52cd7d;
+  --color-green-500: #00944b;
+  --color-green-600: #007439;
+  --color-green-700: #005d2d;
+  --color-green-950: #001d09;
+  --color-amber-50: #fff7ee;
+  --color-amber-300: #ffbc63;
+  --color-amber-500: #d78c00;
+  --color-amber-600: #af7100;
+  --color-amber-700: #885700;
+  --color-amber-950: #311d00;
+  --color-red-50: #fff4f3;
+  --color-red-300: #ff8a82;
+  --color-red-500: #dd2d34;
+  --color-red-600: #b6001c;
+  --color-red-950: #320003;
+  --color-blue-50: #f2f7ff;
+  --color-blue-300: #79b4ff;
+  --color-blue-500: #197ae3;
+  --color-blue-600: #005eb8;
+  --color-blue-950: #001533;
+  --space-0: 0px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --radius-0: 0px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+  --radius-32: 32px;
+  --radius-999: 999px; /* Figma: radius/full (Primitives) — renamed, see fix 1 */
+  --size-16: 16px;
+  --size-20: 20px;
+  --size-24: 24px;
+  --size-44: 44px;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --opacity-40: 0.4; /* Figma stores 40 — see fix 2 */
+  --color-ink-0: #ffffff;
+  --color-ink-50: #f5f8fb;
+  --color-ink-100: #eaeff5;
+  --color-ink-200: #d7dfe9;
+  --color-ink-300: #b8c3d1;
+  --color-ink-400: #8a97a8;
+  --color-ink-500: #677487;
+  --color-ink-600: #4d596a;
+  --color-ink-700: #374250;
+  --color-ink-800: #222b37;
+  --color-ink-850: #19212c;
+  --color-ink-900: #111822;
+  --color-ink-950: #0a0f17;
+  --color-ink-1000: #05080d;
+  --color-ion-50: #ecfcff;
+  --color-ion-100: #d0f6ff;
+  --color-ion-200: #a6edff;
+  --color-ion-300: #6ee0fb;
+  --color-ion-600: #0687b0;
+  --color-ion-700: #086b8e;
+  --color-ion-800: #0c5573;
+  --color-ion-900: #0d465f;
+  --color-ion-950: #052a3c;
+  --color-aura-50: #f2f3ff;
+  --color-aura-200: #cbcfff;
+  --color-aura-300: #a9adff;
+  --color-aura-500: #6b6cf0;
+  --color-aura-600: #5552d6;
+  --color-aura-700: #4541ad;
+  --color-aura-800: #36348a;
+  --color-aura-950: #18173a;
+  --color-white-alpha-4: rgba(255, 255, 255, 0.04);
+  --color-white-alpha-16: rgba(255, 255, 255, 0.16);
+  --color-white-alpha-24: rgba(255, 255, 255, 0.24);
+  --color-white-alpha-40: rgba(255, 255, 255, 0.4);
+  --color-white-alpha-60: rgba(255, 255, 255, 0.6);
+  --color-white-alpha-78: rgba(255, 255, 255, 0.78);
+  --color-white-alpha-90: rgba(255, 255, 255, 0.9);
+  --color-ink-alpha-8: rgba(5, 8, 13, 0.08);
+  --color-ink-alpha-12: rgba(5, 8, 13, 0.12);
+  --color-ink-alpha-16: rgba(5, 8, 13, 0.16);
+  --color-ink-alpha-24: rgba(5, 8, 13, 0.24);
+  --color-ink-alpha-48: rgba(5, 8, 13, 0.48);
+  --color-ink-alpha-56: rgba(5, 8, 13, 0.56);
+  --color-ink-alpha-64: rgba(5, 8, 13, 0.64);
+  --color-ink-alpha-68: rgba(5, 8, 13, 0.68);
+  --color-ink-alpha-80: rgba(5, 8, 13, 0.8);
+  --color-ion-alpha-14: rgba(51, 201, 239, 0.14);
+  --color-ion-alpha-24: rgba(51, 201, 239, 0.24);
+  --color-aura-alpha-16: rgba(136, 139, 250, 0.16);
+  --color-aura-alpha-24: rgba(136, 139, 250, 0.24);
+  --color-ion-700-alpha-48: rgba(8, 107, 142, 0.48);
+}
+
+/* Tier 2 · Semantic · mode-independent (spacing, radius, size, borders) */
+:root {
+  --space-none: var(--space-0);
+  --space-3xs: var(--space-2);
+  --space-2xs: var(--space-4);
+  --space-xs: var(--space-8);
+  --space-sm: var(--space-12);
+  --space-md: var(--space-16);
+  --space-lg: var(--space-20);
+  --space-xl: var(--space-24);
+  --space-2xl: var(--space-32);
+  --space-3xl: var(--space-40);
+  --space-4xl: var(--space-48);
+  --space-5xl: var(--space-64);
+  --layout-screen-margin: var(--space-24);
+  --layout-section-gap: var(--space-32);
+  --radius-none: var(--radius-0);
+  --radius-xs: var(--radius-4);
+  --radius-sm: var(--radius-8);
+  --radius-md: var(--radius-12);
+  --radius-lg: var(--radius-16);
+  --radius-xl: var(--radius-24);
+  --radius-2xl: var(--radius-32);
+  --radius-full: var(--radius-999);
+  --size-touch-target-min: var(--size-44);
+  --size-icon-sm: var(--size-16);
+  --size-icon-md: var(--size-20);
+  --size-icon-lg: var(--size-24);
+  --border-width-default: var(--border-width-1);
+  --border-width-strong: var(--border-width-2);
+  --focus-ring-width: var(--border-width-2);
+  --focus-ring-gap: var(--space-2);
+  --opacity-disabled: var(--opacity-40);
+}
+
+/* Tier 2 · Semantic colour · Light */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --color-brand-primary: var(--color-ion-700);
+  --color-brand-on-primary: var(--color-ink-0);
+  --color-bg-canvas: var(--color-ink-50);
+  --color-bg-subtle: var(--color-ink-100);
+  --color-surface-default: var(--color-ink-0);
+  --color-surface-raised: var(--color-ink-0);
+  --color-surface-sunken: var(--color-ink-100);
+  --color-surface-overlay: var(--color-ink-0);
+  --color-surface-inverse: var(--color-ink-900);
+  --color-surface-brand-subtle: var(--color-ion-50);
+  --color-text-primary: var(--color-ink-950);
+  --color-text-secondary: var(--color-ink-600);
+  --color-text-disabled: var(--color-ink-400);
+  --color-text-inverse: var(--color-ink-0);
+  --color-text-brand: var(--color-ion-700);
+  --color-text-on-brand: var(--color-ink-0);
+  --color-text-link: var(--color-ion-700);
+  --color-icon-primary: var(--color-ink-950);
+  --color-icon-secondary: var(--color-ink-600);
+  --color-icon-disabled: var(--color-ink-400);
+  --color-icon-brand: var(--color-ion-700);
+  --color-icon-on-brand: var(--color-ink-0);
+  --color-icon-inverse: var(--color-ink-0);
+  --color-border-subtle: var(--color-ink-200);
+  --color-border-default: var(--color-ink-500);
+  --color-border-strong: var(--color-ink-700);
+  --color-border-brand: var(--color-ion-700);
+  --color-border-disabled: var(--color-ink-300);
+  --color-interactive-primary: var(--color-ion-700);
+  --color-interactive-primary-hover: var(--color-ion-800);
+  --color-interactive-primary-pressed: var(--color-ion-900);
+  --color-interactive-on-primary: var(--color-ink-0);
+  --color-interactive-secondary: var(--color-ion-100);
+  --color-interactive-secondary-hover: var(--color-ion-200);
+  --color-interactive-on-secondary: var(--color-ion-800);
+  --color-interactive-disabled: var(--color-ink-200);
+  --color-interactive-on-disabled: var(--color-ink-400);
+  --color-feedback-success-fg: var(--color-green-700);
+  --color-feedback-success-surface: var(--color-green-50);
+  --color-feedback-success-border: var(--color-green-500);
+  --color-feedback-warning-fg: var(--color-amber-700);
+  --color-feedback-warning-surface: var(--color-amber-50);
+  --color-feedback-warning-border: var(--color-amber-500);
+  --color-feedback-danger-fg: var(--color-red-600);
+  --color-feedback-danger-surface: var(--color-red-50);
+  --color-feedback-danger-border: var(--color-red-500);
+  --color-feedback-info-fg: var(--color-blue-600);
+  --color-feedback-info-surface: var(--color-blue-50);
+  --color-feedback-info-border: var(--color-blue-500);
+  --color-focus-ring: var(--color-ion-700);
+  --color-focus-ring-offset: var(--color-ink-0);
+  --color-ai-accent: var(--color-aura-600);
+  --color-ai-on-accent: var(--color-ink-0);
+  --color-ai-surface: var(--color-aura-50);
+  --color-ai-border: var(--color-aura-200);
+  --color-ai-text: var(--color-aura-700);
+  --color-ai-gradient-start: var(--color-ion-600);
+  --color-ai-gradient-end: var(--color-aura-500);
+  --color-data-series-1: var(--color-ion-700);
+  --color-data-series-2: var(--color-aura-600);
+  --color-data-series-3: var(--color-ink-500);
+  --color-data-track: var(--color-ink-200);
+  --color-overlay-scrim: var(--color-ink-alpha-48);
+  --color-glass-fill-thin: var(--color-white-alpha-40);
+  --color-glass-fill-regular: var(--color-white-alpha-60);
+  --color-glass-fill-thick: var(--color-white-alpha-78);
+  --color-glass-stroke: var(--color-ink-alpha-8);
+  --color-glass-edge: var(--color-ink-alpha-8);
+  --color-glass-highlight: var(--color-white-alpha-90);
+  --color-glass-shadow: var(--color-ink-alpha-12);
+  --color-glass-tint-brand: var(--color-ion-alpha-14);
+  --color-glass-tint-ai: var(--color-aura-alpha-16);
+  --color-border-decision: var(--color-ink-alpha-16);
+  --color-border-chip: var(--color-ink-alpha-12);
+  --color-border-chip-assumed: var(--color-ink-alpha-24);
+  --color-border-brand-soft: var(--color-ion-700-alpha-48);
+}
+
+/* Tier 2 · Semantic colour · Dark (the leading mode) */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-brand-primary: var(--color-ion-300);
+  --color-brand-on-primary: var(--color-ink-950);
+  --color-bg-canvas: var(--color-ink-1000);
+  --color-bg-subtle: var(--color-ink-950);
+  --color-surface-default: var(--color-ink-900);
+  --color-surface-raised: var(--color-ink-850);
+  --color-surface-sunken: var(--color-ink-1000);
+  --color-surface-overlay: var(--color-ink-850);
+  --color-surface-inverse: var(--color-ink-50);
+  --color-surface-brand-subtle: var(--color-ion-950);
+  --color-text-primary: var(--color-ink-50);
+  --color-text-secondary: var(--color-ink-400);
+  --color-text-disabled: var(--color-ink-600);
+  --color-text-inverse: var(--color-ink-950);
+  --color-text-brand: var(--color-ion-300);
+  --color-text-on-brand: var(--color-ink-950);
+  --color-text-link: var(--color-ion-300);
+  --color-icon-primary: var(--color-ink-50);
+  --color-icon-secondary: var(--color-ink-400);
+  --color-icon-disabled: var(--color-ink-600);
+  --color-icon-brand: var(--color-ion-300);
+  --color-icon-on-brand: var(--color-ink-950);
+  --color-icon-inverse: var(--color-ink-950);
+  --color-border-subtle: var(--color-ink-800);
+  --color-border-default: var(--color-ink-500);
+  --color-border-strong: var(--color-ink-300);
+  --color-border-brand: var(--color-ion-300);
+  --color-border-disabled: var(--color-ink-700);
+  --color-interactive-primary: var(--color-ion-300);
+  --color-interactive-primary-hover: var(--color-ion-200);
+  --color-interactive-primary-pressed: var(--color-ion-100);
+  --color-interactive-on-primary: var(--color-ink-950);
+  --color-interactive-secondary: var(--color-ion-900);
+  --color-interactive-secondary-hover: var(--color-ion-800);
+  --color-interactive-on-secondary: var(--color-ion-200);
+  --color-interactive-disabled: var(--color-ink-800);
+  --color-interactive-on-disabled: var(--color-ink-600);
+  --color-feedback-success-fg: var(--color-green-300);
+  --color-feedback-success-surface: var(--color-green-950);
+  --color-feedback-success-border: var(--color-green-600);
+  --color-feedback-warning-fg: var(--color-amber-300);
+  --color-feedback-warning-surface: var(--color-amber-950);
+  --color-feedback-warning-border: var(--color-amber-600);
+  --color-feedback-danger-fg: var(--color-red-300);
+  --color-feedback-danger-surface: var(--color-red-950);
+  --color-feedback-danger-border: var(--color-red-500);
+  --color-feedback-info-fg: var(--color-blue-300);
+  --color-feedback-info-surface: var(--color-blue-950);
+  --color-feedback-info-border: var(--color-blue-500);
+  --color-focus-ring: var(--color-ion-300);
+  --color-focus-ring-offset: var(--color-ink-1000);
+  --color-ai-accent: var(--color-aura-300);
+  --color-ai-on-accent: var(--color-aura-950);
+  --color-ai-surface: var(--color-aura-950);
+  --color-ai-border: var(--color-aura-800);
+  --color-ai-text: var(--color-aura-200);
+  --color-ai-gradient-start: var(--color-ion-300);
+  --color-ai-gradient-end: var(--color-aura-300);
+  --color-data-series-1: var(--color-ion-300);
+  --color-data-series-2: var(--color-aura-300);
+  --color-data-series-3: var(--color-ink-400);
+  --color-data-track: var(--color-ink-800);
+  --color-overlay-scrim: var(--color-ink-alpha-64);
+  --color-glass-fill-thin: var(--color-ink-alpha-56);
+  --color-glass-fill-regular: var(--color-ink-alpha-68);
+  --color-glass-fill-thick: var(--color-ink-alpha-80);
+  --color-glass-stroke: var(--color-white-alpha-16);
+  --color-glass-edge: var(--color-white-alpha-4);
+  --color-glass-highlight: var(--color-white-alpha-24);
+  --color-glass-shadow: var(--color-ink-alpha-48);
+  --color-glass-tint-brand: var(--color-ion-alpha-24);
+  --color-glass-tint-ai: var(--color-aura-alpha-24);
+  --color-border-decision: var(--color-ink-500);
+  --color-border-chip: var(--color-ink-500);
+  --color-border-chip-assumed: var(--color-ink-300);
+  --color-border-brand-soft: var(--color-ion-300);
+}
+
+/* Tier 3 · Component · ParameterChip */
+:root {
+  --parameter-chip-height-min: var(--size-touch-target-min);
+  --parameter-chip-radius: var(--radius-full);
+  --parameter-chip-padding-x: var(--space-sm);
+  --parameter-chip-gap: var(--space-xs);
+  --parameter-chip-border-width: var(--border-width-default);
+  --parameter-chip-border-width-strong: var(--border-width-strong);
+  --parameter-chip-icon: var(--color-icon-secondary);
+  --parameter-chip-bg-pressed: var(--color-surface-sunken);
+  --parameter-chip-focus-ring: var(--color-focus-ring);
+  --parameter-chip-focus-ring-offset: var(--color-focus-ring-offset);
+  --parameter-chip-confirmed-bg: var(--color-surface-brand-subtle);
+  --parameter-chip-confirmed-border: var(--color-border-subtle);
+  --parameter-chip-confirmed-fg: var(--color-text-primary);
+  --parameter-chip-assumed-bg: var(--color-glass-fill-thin);
+  --parameter-chip-assumed-border: var(--color-border-chip-assumed);
+  --parameter-chip-assumed-fg: var(--color-text-primary);
+  --parameter-chip-assumed-tag-bg: var(--color-feedback-warning-surface);
+  --parameter-chip-assumed-tag-fg: var(--color-feedback-warning-fg);
+  --parameter-chip-missing-bg: var(--color-glass-fill-thin);
+  --parameter-chip-missing-border: var(--color-border-brand);
+  --parameter-chip-missing-fg: var(--color-text-secondary);
+  --parameter-chip-missing-icon: var(--color-icon-brand);
+  --parameter-chip-output-bg: var(--color-ai-surface);
+  --parameter-chip-output-border: var(--color-ai-border);
+  --parameter-chip-output-fg: var(--color-ai-text);
+  --parameter-chip-output-icon: var(--color-ai-accent);
+  --parameter-chip-edited-bg: var(--color-surface-brand-subtle);
+  --parameter-chip-edited-border: var(--color-border-brand-soft);
+  --parameter-chip-edited-fg: var(--color-text-primary);
+  --parameter-chip-edited-tag-bg: var(--color-feedback-info-surface);
+  --parameter-chip-edited-tag-fg: var(--color-feedback-info-fg);
+  --parameter-chip-editing-bg: var(--color-glass-fill-thick);
+  --parameter-chip-editing-border: var(--color-focus-ring);
+  --parameter-chip-editing-fg: var(--color-text-primary);
+  --parameter-chip-editing-caret: var(--color-focus-ring);
+  --parameter-chip-editing-clear: var(--color-icon-secondary);
+  --parameter-chip-editing-confirm-bg: var(--color-interactive-primary);
+  --parameter-chip-editing-confirm-fg: var(--color-interactive-on-primary);
+  --parameter-chip-open-border: var(--color-focus-ring);
+}

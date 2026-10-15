@@ -1,0 +1,27 @@
+{
+  "name": "ai-native-banking-handoff",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Design-to-code handoff for the AI-native mobile banking challenge: design tokens and the ParameterChip component, mapped to Figma with Code Connect.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "figma:publish": "figma connect publish",
+    "figma:unpublish": "figma connect unpublish"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@figma/code-connect": "2.0.2",
+    "@types/node": "20.17.6",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.7.0",
+    "typescript": "5.6.3",
+    "vite": "5.4.21"
+  }
+}
