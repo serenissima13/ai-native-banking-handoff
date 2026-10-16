@@ -26,6 +26,16 @@ const preview: Preview = {
       document.documentElement.dataset.theme = globals.theme === 'light' ? 'light' : 'dark'
       return <Story />
     },
+    // On Docs pages each story sits in a white Storybook block; give it the app's own canvas,
+    // so glass and text are seen on the background they were designed (and contrast-checked) for.
+    (Story, { viewMode, parameters }) =>
+      viewMode === 'docs' && parameters.layout !== 'fullscreen' ? (
+        <div style={{ background: 'var(--color-bg-canvas)', color: 'var(--color-text-primary)', padding: 'var(--space-xl)', borderRadius: 'var(--radius-lg)' }}>
+          <Story />
+        </div>
+      ) : (
+        <Story />
+      ),
   ],
   parameters: {
     // App.css paints the canvas from the tokens; Storybook's own backgrounds would hide it.

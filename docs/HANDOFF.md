@@ -3,6 +3,7 @@
 **Figma:** 04 Components › Chip / ParameterChip · component set `31:123` · 33 variants
 **Code:** `src/components/ParameterChip/ParameterChip.tsx` · React + TypeScript
 **Code Connect:** `ParameterChip.figma.ts` (+ `Icon/icon-*.figma.ts` for the leading icon)
+**Storybook:** [Components › ParameterChip](https://serenissima13.github.io/ai-native-banking-handoff/storybook/?path=/docs/components-parameterchip--docs) — every variant live, each one a test · **Figma handoff page:** [07 Handoff](https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=563-2)
 
 ## What it is
 

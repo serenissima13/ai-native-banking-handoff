@@ -52,6 +52,19 @@ npm run figma:publish
 
 To check the templates without publishing: `npx figma connect parse`.
 
-## Demo online
+## Online
 
-`.github/workflows/deploy.yml` publishes the demo to GitHub Pages on every push to `main`. Enable it once in **Settings → Pages → Source: GitHub Actions**.
+- **Demo:** https://serenissima13.github.io/ai-native-banking-handoff/
+- **Storybook:** https://serenissima13.github.io/ai-native-banking-handoff/storybook/ — Foundations, the components with every variant, and the pattern in context. Each story is also a test.
+
+`.github/workflows/deploy.yml` runs every story as a test, then publishes both to GitHub Pages on every push to `main`. A change that breaks the chip stops there. Enable it once in **Settings → Pages → Source: GitHub Actions**.
+
+## Storybook
+
+```bash
+npm run storybook                        # http://localhost:6006
+npx playwright install chromium          # once, for the tests
+npx vitest --project storybook run       # every story as a test
+```
+
+Where each kind of information lives: **Figma** (page 07 Handoff) explains the design and its decisions; **Storybook** proves the code does it; **docs/HANDOFF.md** is the reference spec that links both.

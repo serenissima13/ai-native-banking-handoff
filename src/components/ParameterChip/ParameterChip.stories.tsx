@@ -136,7 +136,7 @@ const states = ['confirmed', 'assumed', 'missing', 'edited'] as const
 export const AllStates: Story = {
   parameters: figmaDesign('31-123'),
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'max-content repeat(4, max-content)', gap: 16, alignItems: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'max-content repeat(4, max-content)', gap: 16, alignItems: 'center', justifyItems: 'start', overflowX: 'auto' }}>
       <span />
       <span className="text-caption">Input · rest</span>
       <span className="text-caption">Input · editing</span>

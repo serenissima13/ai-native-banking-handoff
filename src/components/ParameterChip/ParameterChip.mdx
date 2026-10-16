@@ -5,71 +5,38 @@ import * as ParameterChipStories from './ParameterChip.stories'
 
 # ParameterChip
 
-A parameter the assistant took from the person's request, shown where it was understood and changeable
-in place. It makes the line between *what you said* and *what I assumed* visible.
+A parameter the assistant took from the person's request, shown where it was understood and changeable in place.
 
-**Figma:** 04 Components › Chip / ParameterChip · component set `31:123` · 33 variants
-**Code:** `src/components/ParameterChip/ParameterChip.tsx`
-**Code Connect:** `ParameterChip.figma.ts` (+ `Icon/icon-*.figma.ts` for the leading icon)
+This page is the **working proof**: every example below is the real component, and every story runs as a test.
+The **why** lives in Figma, the **full spec** in the repository:
+
+- **Design & decisions** — [Figma · 07 Handoff](https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=563-2) · [component set](https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=31-123)
+- **Spec** — [docs/HANDOFF.md](https://github.com/serenissima13/ai-native-banking-handoff/blob/main/docs/HANDOFF.md): property mapping, tokens, findings
 
 <Primary />
 
 ## Three separate questions
 
-| Property | Answers | Values | Shown by |
+| | Question | Prop | Values |
 |---|---|---|---|
-| **Type** · `type` | How is the value changed? | `input` · `select` (Figma also has *Read-only*, used only with Output) | Trailing icon: pencil = input, chevron = select |
-| **State** · `state` | Where did the value come from? | `confirmed` · `assumed` · `missing` · `edited` · `output` | Fill, edge (dashed when assumed) and a tag word |
-| **Interaction** · `open` / `editing` + browser | What is happening now? | rest · pressed · focused · **open** (select only) · **editing** (input only) | Ring, flipped chevron, the chip turning into a field |
+| **Type** | How is the value changed? | `type` | `input` (pencil · Editing) · `select` (chevron · Open) |
+| **State** | Where did it come from? | `state` | `confirmed` · `assumed` · `missing` · `edited` · `output` (read-only) |
+| **Interaction** | What is happening now? | `open` · `editing` | `open` on a select · `editing` on an input · pressed and focused are browser states |
 
-Any State works with either Type: an assumed amount is an input, an assumed deadline is a select.
-The trailing icon never changes with the State.
-
-### Type
-
-| Type | Use for | Tap or Enter | Then |
-|---|---|---|---|
-| Input | Amount | → **editing**: the chip becomes the field, decimal keypad | ✓ or Enter → `onConfirm(draft)` · Escape → `onCancel()` · ✕ empties the field |
-| Select | Deadline, Account, Category | → **open**: the parent's menu anchors below, chevron flips | Choosing closes it · Escape or tap outside closes it unchanged |
-| Read-only | Output only | nothing — not a button | — |
-
-### State
-
-| State | Meaning | Looks |
-|---|---|---|
-| Confirmed | The person said it | Brand-subtle fill |
-| Assumed | The AI inferred it — please check | Glass, **dashed** edge, amber **"assumed"** tag |
-| Missing | Required and absent; blocks the next step | Glass, brand edge, placeholder |
-| Edited | The person changed it | Brand-subtle fill, **"edited"** tag |
-| Output | The AI calculates it | AI surface, sparkle; always read-only |
-
-## Props
+Try it in the controls: change `state` and the trailing icon stays; change `type` and it follows.
 
 <Controls />
 
-## Anatomy
+## What the tests check
 
-```
-┌──────────────────────────────────────────────────────────┐
-│ [leading icon]  Value   [tag]   [trailing icon]          │   min-height 44
-└──────────────────────────────────────────────────────────┘
-   20 px · optional   label/md  12 px   20 px · pencil (input) or chevron (select)
-   padding-x 12 · gap 8 · radius full
-```
+Each story below runs in a real browser on every push, before anything is published:
 
-Editing (input only) replaces value + tag + icon with: input · ✕ clear (32 px) · ✓ confirm (32 px).
+- **Type drives behaviour** — a select announces its menu (`aria-haspopup`, `aria-expanded`) in every state; an input never does; `editing` is ignored on a select.
+- **Interaction** — Editing: the field takes focus, ✕ clears, ✓ confirms with the typed value. Open: `aria-expanded="true"`.
+- **Names** — each name contains the visible text word for word (WCAG 2.5.3).
+- **Styles loaded** — `CssCheck` reads the computed 44 px min-height and the dashed Assumed edge from the token CSS.
 
-## Accessibility
-
-- Input and Select are `<button type="button">`. Select adds `aria-haspopup="menu"` and `aria-expanded`; Input has no popup. Output is a `<span>`.
-- Name: `"<parameter>, <visible text>. Tap to change."` — it repeats the visible value and tag word for word, so voice control can use what is on screen (WCAG 2.5.3): *"Deadline, 1 Jul 2027 assumed. Tap to change."* Missing: *"From account, Choose… Required. Tap to change."*
-- State is never shown by colour alone: the tag word and the dashed edge carry it (WCAG 1.4.1).
-- Focus ring: 2 px offset + 2 px ring (WCAG 2.4.7), also while Open and Editing.
-- Touch target: min-height 44 px. Clear and confirm are 32 px visible with a 40 × 44 hit area, no overlap. Above WCAG 2.5.8 (24 px).
-- Amounts use tabular figures. `prefers-reduced-motion` turns transitions off; `prefers-reduced-transparency` makes glass solid.
-- **Automated check:** axe-core 4.14, WCAG 2.2 A/AA, on the demo in Dark and Light × rest, open and editing — **0 violations**.
-
-See [docs/HANDOFF.md](https://github.com/serenissima13/ai-native-banking-handoff/blob/main/docs/HANDOFF.md) for the full Figma property → code prop mapping, the token table and what handing this component off surfaced and fixed.
+The **Accessibility** panel runs axe on every story; switch **Theme** in the toolbar to check Light and Dark.
 
 ## Every variant
 
