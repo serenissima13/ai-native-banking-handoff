@@ -154,13 +154,14 @@ A review of the component's 41 variables then found four more, fixed in Figma (c
 | 12 | **Confirm button had a `color/glass/stroke` edge in Figma only.** | Removed: a solid primary button needs no glass edge, and the code never had one. |
 | 13 | **The "assumed" tag is amber, against the rule "anything the AI generated carries Aura".** | **By design, now written:** "assumed" asks the person to check a value — a call to confirm, not the AI's voice. The exception is in the usage rules (03 Foundations). |
 
-Separating Type from State then surfaced three more:
+Separating Type from State and building the in-context demo then surfaced four more:
 
 | # | Finding | Resolution |
 |---|---|---|
 | 14 | **The State decided how the chip behaved.** Assumed and Missing always showed a chevron and announced a menu; Confirmed and Edited a pencil and no menu. An assumed *amount* announced a menu it never opened; a confirmed *deadline* opened a menu it never announced. | New **Type** property (Input · Select · Read-only) in Figma — 33 variants, Open only on Select, Editing only on Input — and `type` in code. The trailing icon and ARIA popup now follow the Type. Every instance in the file was set from its parameter (amount → Input; date, account, category → Select). |
 | 15 | **Label in Name (WCAG 2.5.3).** axe 4.14 flagged that the name didn't contain the visible text ("Choose…", "1 Jul 2027 assumed"). | The name now repeats the visible value and tag word for word, then adds "Required" when missing. |
 | 16 | **New variants lost their property links.** The 12 variants added with Type were copies; a copy inside a component set keeps its layers but not its links to Value, Placeholder, Show leading icon and Leading icon. An instance set to *Select · Edited* kept showing "€3,000" and the euro icon whatever it was given — found when building the in-context example on page 04. | Links restored on all 12. Checked by script on all 33 variants: every value text is linked to Value (Placeholder on Missing) and every leading icon to Show leading icon + Leading icon — except Output, whose sparkle is fixed by design. |
+| 17 | **The date menu let the text behind it show through.** In Figma the ChipMenu is glass (`chip-menu/bg` → `color/glass/fill-thick`, at 80% layer opacity) with a 40 px background blur, so nothing behind it can be read. In the browser it sits on the UnderstandingCard, itself glass, and browsers don't reliably blur glass that sits on glass (the card becomes the "backdrop root"): the card's text showed sharp through the menu. | The demo's menu uses `color/surface/raised` — the solid surface the Reduce Transparency fallback already uses — with the glass edge and shadow. It reads as in Figma, in every browser. Also noted: the 80% layer opacity on the menu's fill in Figma is a raw value on top of the token. |
 
 The Confirmed chip's edge (`color/border/subtle` on `color/surface/brand-subtle`) is 1.27:1 in Light and 1.04:1 in Dark. It is decorative — the chip is identified by its value, icon and accessible name — and is now listed with the other decorative edges in the contrast matrix.
 

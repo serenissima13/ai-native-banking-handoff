@@ -37,17 +37,29 @@
 .wiu-thinking { font-size: 12px; line-height: 16px; align-items: center; }
 .wiu-log + .wiu-log { margin-top: var(--space-xs); }
 
-/* UnderstandingCard */
+/* UnderstandingCard
+ * The blur sits on a layer behind the card's content (::before), not on the card itself. When the blur is on
+ * the card, browsers put the card's text in a layer that another glass surface can't blur: the ChipMenu then
+ * showed the card's text sharp through its frosted fill — Figma blurs it. Same look, readable menu. */
 .wiu-card {
+  position: relative;
+  isolation: isolate;
   display: grid;
   gap: var(--space-sm);
   padding: var(--space-md);
   border-radius: var(--radius-xl);
   background: var(--color-glass-fill-regular);
   border: 1px solid var(--color-glass-stroke);
+  box-shadow: var(--effect-glass-regular-shadow);
+}
+.wiu-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
   -webkit-backdrop-filter: blur(var(--effect-glass-regular-blur));
   backdrop-filter: blur(var(--effect-glass-regular-blur));
-  box-shadow: var(--effect-glass-regular-shadow);
 }
 .wiu-card__eyebrow { margin: 0 0 2px; color: var(--color-text-secondary); font-size: 12px; font-weight: 500; line-height: 16px; }
 .wiu-card__title { margin: 0 0 2px; color: var(--color-text-primary); font-size: 28px; font-weight: 600; line-height: 34px; }
@@ -99,7 +111,11 @@
 .wiu-button:disabled { background: var(--color-interactive-disabled); color: var(--color-interactive-on-disabled); cursor: default; }
 .wiu-button:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-gap); }
 
-/* ChipMenu */
+/* ChipMenu
+ * Solid surface, not glass: the card behind it is glass too, and nested backdrop-filter isn't reliable
+ * across browsers (finding 17) — color/surface/raised is the same fallback Reduce Transparency already
+ * uses, with the glass edge and shadow kept so it still reads as the same family of surface.
+ * position: absolute in .wiu-menu-anchor (not fixed) so it scrolls with the chip inside .device__content. */
 .wiu-menu-anchor { position: relative; }
 .wiu-menu {
   position: absolute;
@@ -109,10 +125,8 @@
   width: min(300px, calc(100vw - 2 * var(--layout-screen-margin)));
   padding: var(--space-2xs);
   border-radius: var(--radius-xl);
-  background: var(--color-glass-fill-thick);
+  background: var(--color-surface-raised);
   border: 1px solid var(--color-glass-stroke);
-  -webkit-backdrop-filter: blur(var(--effect-glass-thick-blur));
-  backdrop-filter: blur(var(--effect-glass-thick-blur));
   box-shadow: var(--effect-glass-thick-shadow);
 }
 .wiu-menu__title { margin: 0; padding: var(--space-xs) var(--space-sm); color: var(--color-text-secondary); font-size: 12px; font-weight: 500; }
