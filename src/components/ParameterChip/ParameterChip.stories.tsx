@@ -3,11 +3,11 @@ import { expect, fn } from 'storybook/test'
 import { Icon } from '../Icon'
 import { ParameterChip } from './ParameterChip'
 
-const FIGMA_FILE = 'https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking'
-const figmaDesign = (nodeId: string) => ({ design: { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` } })
-
 // Three separate controls, as in Figma: type (how the value changes), state (where it came from),
 // open / editing (what is happening now — open for select, editing for input).
+// Figma: 04 Components › Chip / ParameterChip, component set 31:123.
+// No per-story "Design" tab: the file doesn't have embedding turned on (Share → Allow embedding),
+// so the addon-designs panel only shows Figma's own 403, not the design — worse than no tab at all.
 const meta = {
   title: 'Components/ParameterChip',
   component: ParameterChip,
@@ -22,7 +22,6 @@ const meta = {
     onConfirm: fn(),
     onCancel: fn(),
   },
-  parameters: figmaDesign('31-123'),
   argTypes: {
     type: { control: 'inline-radio', options: ['input', 'select'] },
     state: { control: 'select', options: ['confirmed', 'assumed', 'missing', 'edited', 'output'] },
@@ -38,7 +37,6 @@ const deadline = { parameter: 'Deadline', type: 'select', value: '1 Jul 2027', i
 
 // Input: typed in place. No popup; the accessible name carries parameter, value and the next step.
 export const Input: Story = {
-  parameters: figmaDesign('31-2'),
   play: async ({ canvas, userEvent, args }) => {
     const chip = canvas.getByRole('button', { name: 'Amount, €3,000. Tap to change.' })
     await expect(chip).not.toHaveAttribute('aria-haspopup')
@@ -49,7 +47,6 @@ export const Input: Story = {
 
 // Select: picked from a list. Announces the menu it opens, whatever the state.
 export const Select: Story = {
-  parameters: figmaDesign('612-28378'),
   args: deadline,
   play: async ({ canvas }) => {
     const chip = canvas.getByRole('button', { name: 'Deadline, 1 Jul 2027. Tap to change.' })
@@ -61,13 +58,11 @@ export const Select: Story = {
 /* ── State (shown on a select; any state works with either type) ── */
 
 export const Assumed: Story = {
-  parameters: figmaDesign('31-26'),
   args: { ...deadline, state: 'assumed' },
 }
 
 // Same state, other type: an assumed amount is still typed in place — no menu.
 export const AssumedInput: Story = {
-  parameters: figmaDesign('612-28402'),
   args: { state: 'assumed' },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('button', { name: /^Amount, €3,000 assumed/ })).not.toHaveAttribute('aria-haspopup')
@@ -75,7 +70,6 @@ export const AssumedInput: Story = {
 }
 
 export const Missing: Story = {
-  parameters: figmaDesign('31-59'),
   args: { parameter: 'From account', type: 'select', state: 'missing', value: undefined, icon: <Icon name="account" /> },
   play: async ({ canvas }) => {
     // Missing shows the placeholder; the name repeats it word for word and adds "Required" (WCAG 2.5.3).
@@ -85,13 +79,11 @@ export const Missing: Story = {
 }
 
 export const Edited: Story = {
-  parameters: figmaDesign('612-28456'),
   args: { ...deadline, state: 'edited', value: '1 Aug 2027' },
 }
 
 // Output is read-only whatever the type: no button at all.
 export const Output: Story = {
-  parameters: figmaDesign('31-86'),
   args: { state: 'output', parameter: 'Monthly saving', value: '≈ €334', type: 'select', open: true },
   play: async ({ canvas }) => {
     await expect(canvas.queryByRole('button')).toBeNull()
@@ -102,7 +94,6 @@ export const Output: Story = {
 /* ── Interaction (scoped by type) ─────────────────────── */
 
 export const Open: Story = {
-  parameters: figmaDesign('264-4206'),
   args: { ...deadline, state: 'assumed', open: true },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('button', { name: /^Deadline, 1 Jul 2027 assumed/ })).toHaveAttribute('aria-expanded', 'true')
@@ -110,7 +101,6 @@ export const Open: Story = {
 }
 
 export const Editing: Story = {
-  parameters: figmaDesign('264-4192'),
   args: { editing: true },
   play: async ({ canvas, userEvent, args }) => {
     const input = canvas.getByRole('textbox', { name: 'Amount' })
@@ -134,7 +124,6 @@ export const EditingIgnoredOnSelect: Story = {
 // The whole matrix at once, as on Figma page 04: rows = State, columns = Type × its own interaction.
 const states = ['confirmed', 'assumed', 'missing', 'edited'] as const
 export const AllStates: Story = {
-  parameters: figmaDesign('31-123'),
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'max-content repeat(4, max-content)', gap: 16, alignItems: 'center', justifyItems: 'start', overflowX: 'auto' }}>
       <span />

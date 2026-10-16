@@ -2,15 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, within } from 'storybook/test'
 import { WhatIUnderstood } from '../../patterns/WhatIUnderstood'
 
-// "What I understood" — the moment the ParameterChip was designed for, as on Figma 05 Screens › 02 Understanding.
-// The same code as the live demo. Theme comes from the toolbar.
-const FIGMA_SCREEN = 'https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=253-361'
-
+// "What I understood" — the moment the ParameterChip was designed for, as on Figma 05 Screens › 02
+// Understanding (node 253:361). The same code as the live demo. Theme comes from the toolbar.
 const meta = {
   title: 'Patterns/Understanding',
   component: WhatIUnderstood,
   tags: ['ai-generated'],
-  parameters: { layout: 'padded', design: { type: 'figma', url: FIGMA_SCREEN } },
+  parameters: { layout: 'padded' },
   render: () => (
     <div style={{ maxWidth: 402 }}>
       <WhatIUnderstood />
