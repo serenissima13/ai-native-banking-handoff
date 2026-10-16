@@ -1,5 +1,8 @@
-# Publishes the demo to GitHub Pages on every push to main.
+# Runs every story as a test, then publishes the demo and the Storybook to GitHub Pages on every
+# push to main. A change that breaks the chip stops here, before it ships.
 # One-time setup in the repository: Settings → Pages → Source: "GitHub Actions".
+# Demo:      https://<org>.github.io/<repo>/
+# Storybook: https://<org>.github.io/<repo>/storybook/
 name: Deploy demo
 
 on:
@@ -26,7 +29,13 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx vitest --project storybook run
       - run: npm run build
+      # Storybook builds with relative asset paths, so it nests cleanly under /storybook/ in the
+      # same Pages deployment — no extra GitHub Pages site or base-path config needed.
+      - run: npm run build-storybook
+      - run: mv storybook-static dist/storybook
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
