@@ -1,9 +1,9 @@
-# Runs every story as a test, then publishes the demo and the Storybook to GitHub Pages on every
-# push to main. A change that breaks the chip stops here, before it ships.
+# Publishes the demo and the Storybook to GitHub Pages on every push to main:
+#   /            → the demo (npm run build)
+#   /storybook/  → the Storybook (npm run build-storybook)
+# The stories run as tests first (Vitest + Playwright): a change that breaks the chip never reaches the public links.
 # One-time setup in the repository: Settings → Pages → Source: "GitHub Actions".
-# Demo:      https://<org>.github.io/<repo>/
-# Storybook: https://<org>.github.io/<repo>/storybook/
-name: Deploy demo
+name: Deploy demo and Storybook
 
 on:
   push:
@@ -26,16 +26,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npx vitest --project storybook run
+      - name: Test every story (interactions, CSS check, a11y panel data)
+        run: npx vitest --project storybook run
       - run: npm run build
-      # Storybook builds with relative asset paths, so it nests cleanly under /storybook/ in the
-      # same Pages deployment — no extra GitHub Pages site or base-path config needed.
-      - run: npm run build-storybook
-      - run: mv storybook-static dist/storybook
+      - run: npm run build-storybook -- --output-dir dist/storybook
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
