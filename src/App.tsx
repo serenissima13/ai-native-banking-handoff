@@ -18,6 +18,13 @@ const euro = (n: number) =>
   new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
 const parseAmount = (text: string) => Number(text.replace(/[^\d.]/g, '')) || 0
 
+const STORYBOOK_URL = 'https://serenissima13.github.io/ai-native-banking-handoff/storybook/'
+const REPO_URL = 'https://github.com/serenissima13/ai-native-banking-handoff'
+
+/**
+ * The live demo: one moment of the product, at phone width (the 402 px frame of the Figma screens) —
+ * screen 02 "What I understood". Every state, the specs and the tests live in Storybook; the design in Figma.
+ */
 export function App() {
   const [theme, setTheme] = useState<Theme>('dark')
   useEffect(() => {
@@ -28,45 +35,36 @@ export function App() {
     <div className="page">
       <header className="page__header">
         <div>
-          <p className="eyebrow">Handoff · AI-native mobile banking</p>
-          <h1>ParameterChip</h1>
-          <p className="lead">
-            A value the assistant took from the person's own words — said, assumed, missing, calculated or edited —
-            and editable where it stands.
-          </p>
+          <p className="eyebrow">Live demo · AI-native mobile banking</p>
+          <h1>What I understood</h1>
         </div>
-        <div className="page__actions">
-          <div className="segmented" role="radiogroup" aria-label="Theme">
-            {(['dark', 'light'] as const).map((t) => (
-              <button key={t} role="radio" aria-checked={theme === t} onClick={() => setTheme(t)}>
-                {t === 'dark' ? 'Dark' : 'Light'}
-              </button>
-            ))}
-          </div>
-          <a className="link" href={FIGMA_URL} target="_blank" rel="noreferrer">
-            Open in Figma ↗
-          </a>
+        <div className="segmented" role="radiogroup" aria-label="Theme">
+          {(['dark', 'light'] as const).map((t) => (
+            <button key={t} role="radio" aria-checked={theme === t} onClick={() => setTheme(t)}>
+              {t === 'dark' ? 'Dark' : 'Light'}
+            </button>
+          ))}
         </div>
       </header>
 
-      <section className="panel">
-        <h2>In context · what I understood</h2>
-        <p className="hint">
-          Tap €3,000 to edit it, the date to pick another month, and the account to choose one. The monthly amount is
-          the assistant's own number: it recalculates and cannot be edited.
+      <main className="phone" aria-label="Conversation">
+        <p className="bubble">
+          I want to save €3,000 for a holiday next summer, but I don't know how much I can afford to save every month.
         </p>
-        <UnderstandingDemo />
-      </section>
+        <p className="assistant">Here's what I understood.</p>
 
-      <section className="panel">
-        <h2>Every state</h2>
-        <p className="hint">Pressed and focused are live: press a chip, or move to it with Tab.</p>
-        <StateMatrix />
-      </section>
+        <section className="panel" aria-labelledby="card-title">
+          <p className="card__eyebrow">✦ What I understood · Summer holiday</p>
+          <h2 id="card-title">Did I get it right?</h2>
+          <p className="hint">Tap any value to change it.</p>
+          <UnderstandingDemo />
+        </section>
+      </main>
 
       <footer className="page__footer">
-        Built from the Figma variables: Component → Semantic → Primitives. Switch the theme: the component has no
-        theme-specific code.
+        <a className="link" href={STORYBOOK_URL}>Every state, specs and tests · Storybook</a>
+        <a className="link" href={FIGMA_URL} target="_blank" rel="noreferrer">Design · Figma ↗</a>
+        <a className="link" href={REPO_URL} target="_blank" rel="noreferrer">Code · GitHub ↗</a>
       </footer>
     </div>
   )
@@ -228,73 +226,5 @@ function MenuAnchor({ open, onClose, options, selected, onSelect, children }: Me
         </div>
       )}
     </div>
-  )
-}
-
-/* ── Every state ─────────────────────────────────────────── */
-// Rows = State (where the value came from). Columns = Type (how it changes) × its own interaction.
-const rows: { state: ParameterChipState; label: string; hint: string; amount: string; date: string }[] = [
-  { state: 'confirmed', label: 'Confirmed', hint: 'the person said it', amount: '€3,000', date: '1 Jul 2027' },
-  { state: 'assumed', label: 'Assumed', hint: 'the assistant inferred it', amount: '€3,000', date: '1 Jul 2027' },
-  { state: 'missing', label: 'Missing', hint: 'required, blocks the next step', amount: '', date: '' },
-  { state: 'edited', label: 'Edited', hint: 'the person changed it', amount: '€2,800', date: '1 Aug 2027' },
-  { state: 'output', label: 'Output', hint: 'the assistant calculates it', amount: '≈ €334', date: '' },
-]
-
-function StateMatrix() {
-  return (
-    <div className="matrix" role="table" aria-label="ParameterChip: State by Type and interaction">
-      <div className="matrix__row matrix__head" role="row">
-        <span role="columnheader">State</span>
-        <span role="columnheader">Input · rest</span>
-        <span role="columnheader">Input · editing</span>
-        <span role="columnheader">Select · rest</span>
-        <span role="columnheader">Select · open</span>
-      </div>
-      {rows.map((r) => (
-        <div className="matrix__row" role="row" key={r.state}>
-          <span role="rowheader" className="matrix__label">
-            {r.label}
-            <span className="matrix__hint">{r.hint}</span>
-          </span>
-          {r.state === 'output' ? (
-            <>
-              <span role="cell">
-                <ParameterChip parameter="Monthly saving" value={r.amount} state="output" />
-              </span>
-              <span role="cell"><span className="na">read-only</span></span>
-              <span role="cell"><span className="na">read-only</span></span>
-              <span role="cell"><span className="na">read-only</span></span>
-            </>
-          ) : (
-            <>
-              <span role="cell">
-                <ParameterChip parameter="Amount" type="input" icon={<Icon name="amount" />} value={r.amount} state={r.state} />
-              </span>
-              <span role="cell">
-                <StaticEditing value={r.amount} />
-              </span>
-              <span role="cell">
-                <ParameterChip parameter="Deadline" type="select" icon={<Icon name="date" />} value={r.date} state={r.state} />
-              </span>
-              <span role="cell">
-                <ParameterChip parameter="Deadline" type="select" icon={<Icon name="date" />} value={r.date} state={r.state} open />
-              </span>
-            </>
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function StaticEditing({ value }: { value: string }) {
-  const [editing, setEditing] = useState(false)
-  return editing ? (
-    <ParameterChip parameter="Amount" type="input" icon={<Icon name="amount" />} value={value} editing onConfirm={() => setEditing(false)} onCancel={() => setEditing(false)} />
-  ) : (
-    <button className="ghost" onClick={() => setEditing(true)}>
-      Show editing
-    </button>
   )
 }
