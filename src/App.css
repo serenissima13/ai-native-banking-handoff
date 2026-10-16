@@ -53,18 +53,24 @@ body {
   display: grid;
   gap: var(--space-md);
 }
-.bubble {
-  justify-self: end;
-  max-width: 85%;
-  margin: 0;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xs) var(--radius-xl);
-  background: var(--color-surface-brand-subtle);
-  font-size: 15px;
+.phone__title {
+  margin: 0 0 var(--space-xs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-glass-stroke);
+  color: var(--color-text-primary);
+  font-size: 16px;
+  font-weight: 500;
   line-height: 22px;
+  text-align: center;
 }
-.assistant { margin: 0; color: var(--color-text-primary); font-size: 15px; }
-.card__eyebrow { margin: 0 0 var(--space-2xs); color: var(--color-ai-text); font-size: 12px; font-weight: 500; }
+.phone__composer {
+  margin-top: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  background: var(--color-glass-fill-thick);
+  border: 1px solid var(--color-glass-stroke);
+  color: var(--color-text-secondary);
+}
 
 .segmented {
   display: inline-flex;
@@ -89,77 +95,9 @@ body {
   color: var(--color-interactive-on-primary);
 }
 
-.panel {
-  padding: var(--space-xl);
-  border-radius: var(--radius-xl);
-  background: var(--color-glass-fill-regular);
-  border: 1px solid var(--color-glass-stroke);
-  -webkit-backdrop-filter: blur(var(--effect-glass-regular-blur));
-  backdrop-filter: blur(var(--effect-glass-regular-blur));
-  box-shadow: var(--effect-glass-regular-shadow);
-}
-.panel h2 { margin: 0 0 var(--space-2xs); font-size: 20px; font-weight: 600; line-height: 28px; }
-.hint { margin: 0 0 var(--space-lg); color: var(--color-text-secondary); font-size: 14px; }
 
-.understanding { display: grid; gap: var(--space-sm); max-width: 420px; }
-.row { display: flex; align-items: center; gap: var(--space-md); }
-.row__label { width: 88px; flex: none; color: var(--color-text-secondary); font-size: 14px; }
-.understanding__footer { margin-top: var(--space-md); }
-.understanding__footer .hint { margin: var(--space-xs) 0 0; }
 
-.cta {
-  min-height: 44px;
-  padding: 0 var(--space-xl);
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--color-interactive-primary);
-  color: var(--color-interactive-on-primary);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-.cta:disabled {
-  background: var(--color-interactive-disabled);
-  color: var(--color-interactive-on-disabled);
-  cursor: not-allowed;
-}
 
-.menu-anchor { position: relative; }
-.menu {
-  position: absolute;
-  z-index: 10;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 280px;
-  padding: var(--space-2xs);
-  border-radius: var(--radius-lg);
-  background: var(--color-glass-fill-thick);
-  border: 1px solid var(--color-glass-stroke);
-  -webkit-backdrop-filter: blur(var(--effect-glass-thick-blur));
-  backdrop-filter: blur(var(--effect-glass-thick-blur));
-  box-shadow: var(--effect-glass-thick-shadow);
-}
-.menu__option {
-  display: flex;
-  width: 100%;
-  min-height: 52px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--space-sm);
-  border: 0;
-  border-radius: var(--radius-md);
-  background: transparent;
-  color: var(--color-text-primary);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.menu__option[aria-checked='true'] { background: var(--color-glass-tint-brand); color: var(--color-text-brand); }
-/* secondary text on the selected tint fell to 4.1:1 in Dark (axe) — primary keeps it above 4.5:1 */
-.menu__option[aria-checked='true'] .menu__meta { color: var(--color-text-primary); }
-.menu__option:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: -2px; }
-.menu__label { display: block; font-weight: 500; font-size: 14px; }
-.menu__meta { display: block; color: var(--color-text-secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
 
 .page > * { min-width: 0; }
 
@@ -167,12 +105,4 @@ body {
 
 @media (max-width: 720px) {
   .page { padding-top: var(--space-xl); }
-  .panel { padding: var(--space-md); }
-
-  .row { gap: var(--space-sm); }
-  .row__label { width: 72px; }
-  /* Phone width: the menu spans the row under the chip, so it never runs off the screen */
-  .row { position: relative; }
-  .menu-anchor { position: static; }
-  .menu { left: 0; right: 0; width: auto; }
 }

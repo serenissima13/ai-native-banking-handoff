@@ -1,0 +1,140 @@
+/*
+ * "What I understood" — Figma 05 Screens › 02 Understanding (State B).
+ * Every value is a Semantic token: the one each Figma component token on that screen aliases
+ * (chat-message/*, understanding-card/*, month-flow/*, chip-menu/*, button/primary/*).
+ */
+
+.wiu {
+  display: grid;
+  gap: var(--space-md);
+}
+
+/* ChatMessage */
+.wiu-message { margin: 0; font-size: 16px; line-height: 24px; color: var(--color-text-primary); }
+.wiu-message--user {
+  justify-self: end;
+  max-width: 300px;
+  padding: var(--space-md);
+  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-xs) var(--radius-xl);
+  background: var(--color-glass-fill-regular);
+  border: 1px solid var(--color-glass-stroke);
+  -webkit-backdrop-filter: blur(var(--effect-glass-regular-blur));
+  backdrop-filter: blur(var(--effect-glass-regular-blur));
+  box-shadow: var(--effect-glass-regular-shadow);
+}
+
+/* ConversationLogLine · ThinkingIndicator */
+.wiu-log,
+.wiu-thinking {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+.wiu-log { font-size: 12px; line-height: 16px; }
+.wiu-log svg, .wiu-thinking svg { flex: none; color: var(--color-icon-secondary); }
+.wiu-thinking { font-size: 12px; line-height: 16px; align-items: center; }
+.wiu-log + .wiu-log { margin-top: var(--space-xs); }
+
+/* UnderstandingCard */
+.wiu-card {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  background: var(--color-glass-fill-regular);
+  border: 1px solid var(--color-glass-stroke);
+  -webkit-backdrop-filter: blur(var(--effect-glass-regular-blur));
+  backdrop-filter: blur(var(--effect-glass-regular-blur));
+  box-shadow: var(--effect-glass-regular-shadow);
+}
+.wiu-card__eyebrow { margin: 0 0 2px; color: var(--color-text-secondary); font-size: 12px; font-weight: 500; line-height: 16px; }
+.wiu-card__title { margin: 0 0 2px; color: var(--color-text-primary); font-size: 28px; font-weight: 600; line-height: 34px; }
+.wiu-card__why { margin: 0; color: var(--color-text-secondary); font-size: 14px; line-height: 20px; }
+
+.wiu-params { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.wiu-param { display: grid; gap: 6px; align-content: start; }
+.wiu-label { margin: 0; color: var(--color-text-secondary); font-size: 12px; font-weight: 500; line-height: 16px; }
+
+.wiu-divider { width: 100%; height: 1px; margin: 0; border: 0; background: var(--color-glass-stroke); }
+
+/* MonthFlowBar */
+.wiu-flow { display: grid; gap: 10px; margin: 0; }
+.wiu-flow__title { color: var(--color-text-primary); font-size: 14px; font-weight: 500; line-height: 20px; }
+.wiu-flow__bar { display: flex; gap: 3px; height: 10px; }
+.wiu-flow__bar span { flex-basis: 0; border-radius: var(--radius-full); }
+.wiu-flow__out { background: var(--color-data-series-3); }
+.wiu-flow__left { background: var(--color-data-series-1); }
+.wiu-flow__legend { display: flex; justify-content: space-between; margin: 0; }
+.wiu-flow__legend > div:nth-child(2) { text-align: center; }
+.wiu-flow__legend > div:last-child { text-align: right; }
+.wiu-flow__legend dt { display: flex; align-items: center; gap: 6px; color: var(--color-text-secondary); font-size: 12px; line-height: 16px; }
+.wiu-flow__legend > div:nth-child(2) dt { justify-content: center; }
+.wiu-flow__legend > div:last-child dt { justify-content: flex-end; }
+.wiu-flow__legend dd { margin: 2px 0 0; color: var(--color-text-primary); font-size: 16px; font-weight: 500; line-height: 22px; font-variant-numeric: tabular-nums; }
+.wiu-key { width: 8px; height: 8px; border-radius: var(--radius-full); }
+.wiu-key--out { background: var(--color-data-series-3); }
+.wiu-key--left { background: var(--color-data-series-1); }
+
+/* NoteLine · ProvenanceFootnote */
+.wiu-note { margin: 0; color: var(--color-text-primary); font-size: 14px; line-height: 20px; font-variant-numeric: tabular-nums; }
+.wiu-footnote { display: flex; gap: 6px; margin: 0; color: var(--color-text-secondary); font-size: 12px; line-height: 16px; }
+.wiu-footnote svg { flex: none; color: var(--color-icon-secondary); }
+
+/* Button · Primary · Small */
+.wiu-button {
+  min-height: var(--size-touch-target-min);
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-interactive-primary);
+  color: var(--color-interactive-on-primary);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.wiu-button:hover:not(:disabled) { background: var(--color-interactive-primary-hover); }
+.wiu-button:disabled { background: var(--color-interactive-disabled); color: var(--color-interactive-on-disabled); cursor: default; }
+.wiu-button:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-gap); }
+
+/* ChipMenu */
+.wiu-menu-anchor { position: relative; }
+.wiu-menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + var(--space-xs));
+  left: 0;
+  width: min(300px, calc(100vw - 2 * var(--layout-screen-margin)));
+  padding: var(--space-2xs);
+  border-radius: var(--radius-xl);
+  background: var(--color-glass-fill-thick);
+  border: 1px solid var(--color-glass-stroke);
+  -webkit-backdrop-filter: blur(var(--effect-glass-thick-blur));
+  backdrop-filter: blur(var(--effect-glass-thick-blur));
+  box-shadow: var(--effect-glass-thick-shadow);
+}
+.wiu-menu__title { margin: 0; padding: var(--space-xs) var(--space-sm); color: var(--color-text-secondary); font-size: 12px; font-weight: 500; }
+.wiu-menu__option {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-sm);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.wiu-menu__option[aria-checked='true'] { background: var(--color-glass-tint-brand); }
+.wiu-menu__option svg { color: var(--color-interactive-primary); }
+.wiu-menu__option:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: -2px; }
+.wiu-menu__label { display: block; font-weight: 500; font-size: 14px; }
+.wiu-menu__meta { display: block; color: var(--color-text-secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
+/* The tint lowers secondary text contrast in Dark (axe, earlier): primary keeps it above 4.5:1 */
+.wiu-menu__option[aria-checked='true'] .wiu-menu__meta { color: var(--color-text-primary); }

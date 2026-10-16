@@ -1,5 +1,6 @@
 /**
- * Icon · the subset of the Figma icon set (page 04 › Icon / Icon set) used by ParameterChip.
+ * Icon · the subset of the Figma icon set (page 04 › Icon / Icon set) used by ParameterChip and the
+ * "What I understood" pattern (info: provenance and conversation-log lines).
  * Paths are exported from Figma as SVG; stroke uses currentColor so the parent sets the colour.
  */
 const paths = {
@@ -26,6 +27,11 @@ const paths = {
   edit: ['M13.75 2.91675L17.0833 6.25008L6.66666 16.6667H3.33333V13.3334L13.75 2.91675Z'],
   'chevron-down': ['M5 7.5L10 12.5L15 7.5'],
   sparkle: ['M10 2.5L11.5833 7.16667L16.25 8.75L11.5833 10.3333L10 15L8.41667 10.3333L3.75 8.75L8.41667 7.16667L10 2.5Z'],
+  info: [
+    'M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z',
+    'M10 9.16675V13.3334',
+    'M10 6.66675H10.0083',
+  ],
   x: ['M15 5L5 15', 'M5 5L15 15'],
   check: ['M16.6667 5L7.50004 14.1667L3.33337 10'],
 } as const

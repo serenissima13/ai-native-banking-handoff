@@ -1,51 +1,58 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, within, userEvent } from 'storybook/test'
-import { UnderstandingDemo } from '../../App'
+import { expect, within } from 'storybook/test'
+import { WhatIUnderstood } from '../../patterns/WhatIUnderstood'
 
-// The "what I understood" pattern — the same demo deployed to the live site, shown here on its own
-// (no page header, no theme switch: that's the Theme toolbar above). Mirrors Figma's final journey,
-// screens 02 "What I understood" and 03 Plan steps.
+// "What I understood" — the moment the ParameterChip was designed for, as on Figma 05 Screens › 02 Understanding.
+// The same code as the live demo. Theme comes from the toolbar.
+const FIGMA_SCREEN = 'https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=253-361'
+
 const meta = {
   title: 'Patterns/Understanding',
-  component: UnderstandingDemo,
+  component: WhatIUnderstood,
   tags: ['ai-generated'],
-  parameters: { layout: 'padded' },
-} satisfies Meta<typeof UnderstandingDemo>
+  parameters: { layout: 'padded', design: { type: 'figma', url: FIGMA_SCREEN } },
+  render: () => (
+    <div style={{ maxWidth: 402 }}>
+      <WhatIUnderstood />
+    </div>
+  ),
+} satisfies Meta<typeof WhatIUnderstood>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
+// As the screen opens: the amount was said, the date was assumed from "next summer".
 export const Default: Story = {
-  render: () => (
-    <div className="panel" style={{ maxWidth: 420 }}>
-      <UnderstandingDemo />
-    </div>
-  ),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    // Said, assumed and missing are all present together, exactly as the journey shows them.
-    await expect(canvas.getByRole('button', { name: /^Amount, €3,000\. Tap to change\./ })).toBeInTheDocument()
-    await expect(canvas.getByRole('button', { name: /^Deadline, Jul 2027 assumed/ })).toBeInTheDocument()
-    await expect(canvas.getByRole('button', { name: /^From account, Choose… Required/ })).toBeInTheDocument()
-    // Missing blocks the next step.
-    await expect(canvas.getByRole('button', { name: 'Find the money' })).toBeDisabled()
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: 'Amount, €3,000. Tap to change.' })).not.toHaveAttribute('aria-haspopup')
+    await expect(canvas.getByRole('button', { name: /^When, 1 Jul 2027 · 9 months assumed/ })).toHaveAttribute('aria-haspopup', 'menu')
+    await expect(canvas.getByText('From "next summer": I took the start of July.')).toBeVisible()
+    await expect(canvas.getByText("You'd need about €334 a month.")).toBeVisible()
   },
 }
 
-export const Editing: Story = {
-  render: () => (
-    <div className="panel" style={{ maxWidth: 420 }}>
-      <UnderstandingDemo />
-    </div>
-  ),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
+// Select: pick another month → the chip becomes Edited, the plan recalculates, the conversation records it.
+export const ChangeTheDeadline: Story = {
+  play: async ({ canvas, userEvent, canvasElement }) => {
+    await userEvent.click(canvas.getByRole('button', { name: /^When/ }))
+    const menu = within(canvasElement).getByRole('menu', { name: 'When do you want it by?' })
+    await userEvent.click(within(menu).getByRole('menuitemradio', { name: /1 Aug 2027/ }))
+    await expect(canvas.getByRole('button', { name: /^When, 1 Aug 2027 · 10 months edited/ })).toBeInTheDocument()
+    await expect(canvas.queryByText('From "next summer": I took the start of July.')).toBeNull()
+    await expect(canvas.getByText("You'd need about €300 a month.")).toBeVisible()
+    await expect(canvas.getByText('You changed the deadline to August · €300 a month')).toBeVisible()
+  },
+}
+
+// Input: edit the amount in place → Edited, recalculated.
+export const EditTheAmount: Story = {
+  play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole('button', { name: /^Amount/ }))
     const input = await canvas.findByRole('textbox', { name: 'Amount' })
     await userEvent.clear(input)
     await userEvent.type(input, '2500')
     await userEvent.click(canvas.getByRole('button', { name: 'Confirm Amount' }))
-    // The person edited the amount: the chip moves to state="edited" and carries the tag.
     await expect(canvas.getByRole('button', { name: /^Amount, €2,500 edited/ })).toBeInTheDocument()
+    await expect(canvas.getByText("You'd need about €278 a month.")).toBeVisible()
   },
 }
