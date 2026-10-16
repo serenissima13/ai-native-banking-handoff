@@ -20,21 +20,21 @@ body {
 }
 
 .page {
-  max-width: 560px;
+  max-width: 1040px;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: var(--space-3xl) var(--layout-screen-margin) var(--space-5xl);
+  padding: var(--space-3xl) var(--layout-screen-margin);
   display: grid;
-  gap: var(--layout-section-gap);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-5xl);
 }
 
-.page__header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--space-md);
-}
-.page__header h1 { margin: var(--space-2xs) 0 0; font-size: 28px; font-weight: 300; line-height: 34px; }
+/* Left: what this is, the theme switch, where to go next */
+.intro { display: grid; justify-items: start; gap: var(--space-md); max-width: 420px; }
+.intro h1 { margin: 0; font-size: 40px; font-weight: 300; line-height: 48px; letter-spacing: -0.02em; }
+.intro__lead { margin: 0; color: var(--color-text-secondary); }
+.intro__links { display: grid; gap: var(--space-xs); margin-top: var(--space-sm); font-size: 14px; }
 .eyebrow {
   margin: 0;
   color: var(--color-text-brand);
@@ -45,32 +45,78 @@ body {
 }
 .link { color: var(--color-text-link); font-weight: 500; text-underline-offset: 3px; }
 
-/* One moment of the product at phone width: the 402 px frame of the Figma screens */
-.phone {
-  width: 100%;
-  max-width: 402px;
-  margin: 0 auto;
-  display: grid;
-  gap: var(--space-md);
+/*
+ * A simple phone: a thin bezel around the 402 × 874 screen of the Figma frames.
+ * Demo chrome only — a dark Ink bezel in both themes, like real hardware, one step lighter than the
+ * Dark canvas so the phone keeps its edge; the island uses the darkest Ink.
+ */
+.device {
+  padding: 10px;
+  border-radius: 64px;
+  background: var(--color-ink-900);
+  box-shadow: 0 0 0 1px var(--color-glass-stroke), 0 40px 80px -24px var(--color-glass-shadow);
 }
-.phone__title {
-  margin: 0 0 var(--space-xs);
-  padding-bottom: var(--space-sm);
+.device__screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 402px;
+  height: min(874px, calc(100vh - 2 * var(--space-3xl) - 20px));
+  min-height: 640px;
+  overflow: hidden;
+  border-radius: 54px;
+  background:
+    radial-gradient(28rem 20rem at 0% 0%, var(--color-glass-tint-brand), transparent 70%),
+    radial-gradient(24rem 18rem at 100% 30%, var(--color-glass-tint-ai), transparent 70%),
+    var(--color-bg-canvas);
+}
+.device__status {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 54px;
+  padding: 0 32px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.device__island { width: 125px; height: 37px; border-radius: var(--radius-full); background: var(--color-ink-1000); }
+.device__battery {
+  justify-self: end;
+  width: 25px;
+  height: 12px;
+  border: 1.5px solid var(--color-text-primary);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px var(--color-bg-canvas), inset 0 0 0 10px var(--color-text-primary);
+}
+.device__title {
+  flex: none;
+  margin: 0;
+  padding: var(--space-xs) var(--layout-screen-margin) var(--space-sm);
   border-bottom: 1px solid var(--color-glass-stroke);
-  color: var(--color-text-primary);
   font-size: 16px;
   font-weight: 500;
   line-height: 22px;
   text-align: center;
 }
-.phone__composer {
-  margin-top: var(--space-xs);
+.device__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md) var(--layout-screen-margin) var(--space-xl);
+  scrollbar-width: none;
+}
+.device__content::-webkit-scrollbar { display: none; }
+.device__composer {
+  flex: none;
+  margin: 0 var(--layout-screen-margin);
   padding: var(--space-md);
   border-radius: var(--radius-xl);
   background: var(--color-glass-fill-thick);
   border: 1px solid var(--color-glass-stroke);
   color: var(--color-text-secondary);
 }
+.device__home { flex: none; height: 34px; display: grid; place-items: center; }
+.device__home::after { content: ''; width: 134px; height: 5px; border-radius: var(--radius-full); background: var(--color-text-primary); }
 
 .segmented {
   display: inline-flex;
@@ -101,8 +147,20 @@ body {
 
 .page > * { min-width: 0; }
 
-.page__footer { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-xs) var(--space-lg); font-size: 14px; }
+/* Narrower screens: the intro sits above the phone */
+@media (max-width: 960px) {
+  .page { grid-template-columns: 1fr; justify-items: center; gap: var(--space-2xl); min-height: 0; }
+  .intro { justify-items: center; text-align: center; }
+}
 
-@media (max-width: 720px) {
-  .page { padding-top: var(--space-xl); }
+/* On a real phone the frame steps aside: the screen is the phone */
+@media (max-width: 480px) {
+  .page { padding: var(--space-xl) 0 0; gap: var(--space-xl); }
+  .intro { padding: 0 var(--layout-screen-margin); }
+  .intro h1 { font-size: 32px; line-height: 40px; }
+  .device { width: 100%; padding: 0; border-radius: 0; background: none; box-shadow: none; }
+  .device__screen { width: 100%; height: auto; min-height: 0; overflow: visible; border-radius: 0; border-top: 1px solid var(--color-glass-stroke); }
+  .device__status, .device__home { display: none; }
+  .device__content { overflow: visible; }
+  .device__composer { margin-bottom: var(--space-xl); }
 }
