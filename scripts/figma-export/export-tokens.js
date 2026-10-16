@@ -17,7 +17,7 @@ const CONFIG = {
   semanticCollection: 'Semantic',
   componentCollection: 'Component',
   componentPrefixes: ['parameter-chip/'],
-  textStyles: ['label/md', 'caption'],
+  textStyles: ['display/amount', 'label/md', 'caption'],
   effectStyles: ['glass/thin', 'glass/regular', 'glass/thick'],
 }
 

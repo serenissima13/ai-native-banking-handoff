@@ -5,21 +5,35 @@ import './ParameterChip.css'
 /**
  * ParameterChip — a parameter the assistant extracted from the person's request, editable in place.
  *
- * Figma: 04 Components › Chip / ParameterChip (component set 31:123, 21 variants).
+ * Figma: 04 Components › Chip / ParameterChip (component set 31:123, 33 variants).
+ *
+ * Three independent questions:
+ *   type        — how the value is changed:  input (typed in place) · select (picked from a list)
+ *   state       — where the value came from: confirmed · assumed · missing · edited · output
+ *   interaction — what is happening now:     rest · pressed · focused (browser states)
+ *                                             open (select only) · editing (input only)
+ * Any state works with either type. The trailing icon shows the type (pencil = input, chevron = select),
+ * never the state. state="output" is always read-only: type, open and editing are ignored.
+ *
  * Figma property → code prop
- *   Value (text)              → value
- *   Placeholder (text)        → placeholder           (shown when state="missing")
- *   Show leading icon (bool)  → icon present / absent
- *   Leading icon (swap)       → icon                  (<Icon name="amount" | "date" | "category" | "account" />)
+ *   Type=Input | Select       → type="input" | "select"   (Type=Read-only ↔ state="output")
  *   State (variant)           → state
  *   Interaction=Default       → (rest)
  *   Interaction=Pressed       → CSS :active           (runtime, not a prop)
  *   Interaction=Focused       → CSS :focus-visible    (runtime, not a prop)
- *   Interaction=Open          → open
- *   Interaction=Editing       → editing
+ *   Interaction=Open          → open                  (type="select" only)
+ *   Interaction=Editing       → editing               (type="input" only)
+ *   Value (text)              → value
+ *   Placeholder (text)        → placeholder           (shown when state="missing")
+ *   Show leading icon (bool)  → icon present / absent
+ *   Leading icon (swap)       → icon                  (<Icon name="amount" | "date" | "category" | "account" />)
  * Code-only: parameter (accessible name), onPress, onConfirm, onCancel, inputMode.
  */
 
+/** How the value is changed. */
+export type ParameterChipType = 'input' | 'select'
+
+/** Where the value came from. */
 export type ParameterChipState = 'confirmed' | 'assumed' | 'missing' | 'output' | 'edited'
 
 export interface ParameterChipProps {
@@ -30,25 +44,31 @@ export interface ParameterChipProps {
   /** Text shown when the value is missing. Figma default: "Choose…". */
   placeholder?: string
   /**
-   * Where the value came from.
+   * TYPE — how the value is changed.
+   * input — typed in place (Amount): tap → editing · select — picked from a list (Deadline, Account): tap → open.
+   * Decides the trailing icon (pencil / chevron) and the ARIA popup. Ignored for state="output".
+   */
+  type?: ParameterChipType
+  /**
+   * STATE — where the value came from.
    * confirmed — the person said it · assumed — the assistant inferred it (dashed edge + "assumed" tag)
-   * missing — required and absent (blocks the next step) · output — the assistant will calculate it (not interactive)
-   * edited — the person changed it ("edited" tag)
+   * missing — required and absent (blocks the next step) · edited — the person changed it ("edited" tag)
+   * output — the assistant calculates it (read-only, whatever the type)
    */
   state?: ParameterChipState
   /** Leading icon. Omit it to hide the icon (Figma: Show leading icon = false). Ignored for state="output". */
   icon?: ReactNode
-  /** A menu is open, anchored below the chip (dates, accounts). The chevron flips. */
+  /** INTERACTION · type="select" only: the menu is open, anchored below the chip. The chevron flips. */
   open?: boolean
-  /** The chip has become the field: numeric keypad, ✕ clears, ✓ confirms. */
+  /** INTERACTION · type="input" only: the chip has become the field — keypad, ✕ clears, ✓ confirms. */
   editing?: boolean
-  /** Tap on the chip (opens the menu or starts editing — the parent decides). */
+  /** Tap on the chip. The parent starts editing (input) or opens its menu (select). */
   onPress?: () => void
-  /** ✓ or Enter while editing. The parent usually moves the chip to state="edited". */
+  /** Input · ✓ or Enter while editing. The parent usually moves the chip to state="edited". */
   onConfirm?: (value: string) => void
-  /** Escape while editing: leave without changes. */
+  /** Input · Escape while editing: leave without changes. */
   onCancel?: () => void
-  /** Keyboard while editing. Amounts use "decimal" (Figma: Keyboard / Decimal pad). */
+  /** Input · keyboard while editing. Amounts use "decimal" (Figma: Keyboard / Decimal pad). */
   inputMode?: 'decimal' | 'text'
   className?: string
 }
@@ -72,10 +92,22 @@ function accessibleName(parameter: string, value: string | undefined, state: Par
   return state === 'output' ? `${sentence}.` : `${sentence}. Tap to change.`
 }
 
+/**
+ * Name for the interactive chip. It contains the visible text word for word — value (or placeholder) and tag —
+ * so voice-control users can say what they see ("click 1 Jul 2027 assumed") · WCAG 2.5.3 Label in Name.
+ */
+function buttonName(parameter: string, visible: string, state: ParameterChipState) {
+  const end = /[.…]$/.test(visible) ? '' : '.'
+  return state === 'missing'
+    ? `${parameter}, ${visible}${end} Required. Tap to change.`
+    : `${parameter}, ${visible}${end} Tap to change.`
+}
+
 export function ParameterChip({
   parameter,
   value = '',
   placeholder = 'Choose…',
+  type = 'input',
   state = 'confirmed',
   icon,
   open = false,
@@ -100,7 +132,11 @@ export function ParameterChip({
     )
   }
 
-  if (editing) {
+  // Interaction is scoped by type: only an input can be edited, only a select can be open.
+  const isEditing = type === 'input' && editing
+  const isOpen = type === 'select' && open
+
+  if (isEditing) {
     return (
       <EditingChip
         className={classes}
@@ -115,23 +151,29 @@ export function ParameterChip({
   }
 
   const tag = tagText[state]
-  const trailing = state === 'assumed' || state === 'missing' || open ? 'chevron-down' : 'edit'
+  const shown = state === 'missing' ? placeholder : value
+  // The trailing icon tells how the value changes (type), never where it came from (state).
+  const trailing = type === 'select' ? 'chevron-down' : 'edit'
 
   return (
     <button
       type="button"
       className={classes}
+      data-type={type}
       data-state={state}
-      data-open={open || undefined}
-      aria-label={accessibleName(parameter, value, state)}
-      aria-haspopup={trailing === 'chevron-down' ? 'menu' : undefined}
-      aria-expanded={trailing === 'chevron-down' ? open : undefined}
+      data-open={isOpen || undefined}
+      aria-label={buttonName(parameter, tag ? `${shown} ${tag}` : shown, state)}
+      aria-haspopup={type === 'select' ? 'menu' : undefined}
+      aria-expanded={type === 'select' ? isOpen : undefined}
       onClick={onPress}
     >
       {icon && <span className="pchip__icon" aria-hidden="true">{icon}</span>}
       <span className="pchip__value text-label-md" aria-hidden="true">
-        {state === 'missing' ? placeholder : value}
+        {shown}
       </span>
+      {/* A space between value and tag, so the visible text reads "1 Jul 2027 assumed" like the name.
+          Whitespace-only text in a flex container takes no room: the gap token still sets the spacing. */}
+      {tag && ' '}
       {tag && (
         <span className="pchip__tag text-caption" aria-hidden="true">
           {tag}

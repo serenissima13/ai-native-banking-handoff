@@ -81,9 +81,9 @@ body {
   border-radius: var(--radius-xl);
   background: var(--color-glass-fill-regular);
   border: 1px solid var(--color-glass-stroke);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  box-shadow: inset 0 1px 0 0 var(--color-glass-highlight), 0 8px 32px 0 var(--color-glass-shadow);
+  -webkit-backdrop-filter: blur(var(--effect-glass-regular-blur));
+  backdrop-filter: blur(var(--effect-glass-regular-blur));
+  box-shadow: var(--effect-glass-regular-shadow);
 }
 .panel h2 { margin: 0 0 var(--space-2xs); font-size: 20px; font-weight: 600; line-height: 28px; }
 .hint { margin: 0 0 var(--space-lg); color: var(--color-text-secondary); font-size: 14px; }
@@ -122,9 +122,9 @@ body {
   border-radius: var(--radius-lg);
   background: var(--color-glass-fill-thick);
   border: 1px solid var(--color-glass-stroke);
-  -webkit-backdrop-filter: blur(40px);
-  backdrop-filter: blur(40px);
-  box-shadow: inset 0 1px 0 0 var(--color-glass-highlight), 0 12px 40px 0 var(--color-glass-shadow);
+  -webkit-backdrop-filter: blur(var(--effect-glass-thick-blur));
+  backdrop-filter: blur(var(--effect-glass-thick-blur));
+  box-shadow: var(--effect-glass-thick-shadow);
 }
 .menu__option {
   display: flex;
@@ -153,8 +153,9 @@ body {
 .matrix {
   display: grid;
   /* One grid for the whole table: every column sizes to its widest chip, so nothing overlaps */
-  grid-template-columns: repeat(4, max-content);
-  column-gap: var(--space-xl);
+  /* State column wraps its hint; the four chip columns size to their widest chip */
+  grid-template-columns: fit-content(11rem) repeat(4, max-content);
+  column-gap: var(--space-lg);
   justify-content: start;
   overflow-x: auto;
 }
@@ -173,7 +174,8 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.matrix__label { font-size: 14px; }
+.matrix__label { font-size: 14px; font-weight: 500; }
+.matrix__hint { display: block; color: var(--color-text-secondary); font-size: 13px; font-weight: 400; }
 .na { color: var(--color-text-disabled); font-size: 13px; }
 .ghost {
   min-height: 44px;

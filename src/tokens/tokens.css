@@ -358,3 +358,15 @@
   --parameter-chip-border-width-missing: var(--border-width-medium);
   --parameter-chip-padding-right-editing: var(--space-inset-nested);
 }
+
+/* Code only · Reduce Transparency: every glass fill falls back to the solid raised surface */
+
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --color-glass-fill-thin: var(--color-surface-raised);
+    --color-glass-fill-regular: var(--color-surface-raised);
+    --color-glass-fill-thick: var(--color-surface-raised);
+  }
+}

@@ -73,7 +73,8 @@ export function App() {
 }
 
 /* ── In context ─────────────────────────────────────────── */
-function UnderstandingDemo() {
+// Exported for Storybook: Patterns/Understanding reuses this exact demo, no re-implementation.
+export function UnderstandingDemo() {
   const [amount, setAmount] = useState({ value: '€3,000', state: 'confirmed' as ParameterChipState, editing: false })
   const [deadline, setDeadline] = useState({ value: 'Jul 2027', state: 'assumed' as ParameterChipState })
   const [account, setAccount] = useState<{ value: string; state: ParameterChipState }>({ value: '', state: 'missing' })
@@ -88,6 +89,7 @@ function UnderstandingDemo() {
       <Row label="Save">
         <ParameterChip
           parameter="Amount"
+          type="input"
           icon={<Icon name="amount" />}
           value={amount.value}
           state={amount.state}
@@ -117,6 +119,7 @@ function UnderstandingDemo() {
         >
           <ParameterChip
             parameter="Deadline"
+            type="select"
             icon={<Icon name="date" />}
             value={deadline.value}
             state={deadline.state}
@@ -139,6 +142,7 @@ function UnderstandingDemo() {
         >
           <ParameterChip
             parameter="From account"
+            type="select"
             icon={<Icon name="account" />}
             value={account.value}
             state={account.state}
@@ -228,43 +232,56 @@ function MenuAnchor({ open, onClose, options, selected, onSelect, children }: Me
 }
 
 /* ── Every state ─────────────────────────────────────────── */
-const rows: { state: ParameterChipState; label: string; value: string }[] = [
-  { state: 'confirmed', label: 'Confirmed · the person said it', value: '€3,000' },
-  { state: 'assumed', label: 'Assumed · the assistant inferred it', value: '1 Jul 2027' },
-  { state: 'missing', label: 'Missing · required, blocks the next step', value: '' },
-  { state: 'edited', label: 'Edited · the person changed it', value: '€2,800' },
-  { state: 'output', label: 'Output · the assistant calculates it', value: '≈ €334' },
+// Rows = State (where the value came from). Columns = Type (how it changes) × its own interaction.
+const rows: { state: ParameterChipState; label: string; hint: string; amount: string; date: string }[] = [
+  { state: 'confirmed', label: 'Confirmed', hint: 'the person said it', amount: '€3,000', date: '1 Jul 2027' },
+  { state: 'assumed', label: 'Assumed', hint: 'the assistant inferred it', amount: '€3,000', date: '1 Jul 2027' },
+  { state: 'missing', label: 'Missing', hint: 'required, blocks the next step', amount: '', date: '' },
+  { state: 'edited', label: 'Edited', hint: 'the person changed it', amount: '€2,800', date: '1 Aug 2027' },
+  { state: 'output', label: 'Output', hint: 'the assistant calculates it', amount: '≈ €334', date: '' },
 ]
 
 function StateMatrix() {
   return (
-    <div className="matrix" role="table" aria-label="ParameterChip states">
+    <div className="matrix" role="table" aria-label="ParameterChip: State by Type and interaction">
       <div className="matrix__row matrix__head" role="row">
         <span role="columnheader">State</span>
-        <span role="columnheader">Default</span>
-        <span role="columnheader">Open</span>
-        <span role="columnheader">Editing</span>
+        <span role="columnheader">Input · rest</span>
+        <span role="columnheader">Input · editing</span>
+        <span role="columnheader">Select · rest</span>
+        <span role="columnheader">Select · open</span>
       </div>
       {rows.map((r) => (
         <div className="matrix__row" role="row" key={r.state}>
-          <span role="rowheader" className="matrix__label">{r.label}</span>
-          <span role="cell">
-            <ParameterChip parameter="Example" icon={r.state === 'output' ? undefined : <Icon name="amount" />} value={r.value} state={r.state} />
+          <span role="rowheader" className="matrix__label">
+            {r.label}
+            <span className="matrix__hint">{r.hint}</span>
           </span>
-          <span role="cell">
-            {r.state !== 'output' ? (
-              <ParameterChip parameter="Example" icon={<Icon name="amount" />} value={r.value} state={r.state} open />
-            ) : (
-              <span className="na">not interactive</span>
-            )}
-          </span>
-          <span role="cell">
-            {r.state !== 'output' ? (
-              <StaticEditing value={r.value} />
-            ) : (
-              <span className="na">not interactive</span>
-            )}
-          </span>
+          {r.state === 'output' ? (
+            <>
+              <span role="cell">
+                <ParameterChip parameter="Monthly saving" value={r.amount} state="output" />
+              </span>
+              <span role="cell"><span className="na">read-only</span></span>
+              <span role="cell"><span className="na">read-only</span></span>
+              <span role="cell"><span className="na">read-only</span></span>
+            </>
+          ) : (
+            <>
+              <span role="cell">
+                <ParameterChip parameter="Amount" type="input" icon={<Icon name="amount" />} value={r.amount} state={r.state} />
+              </span>
+              <span role="cell">
+                <StaticEditing value={r.amount} />
+              </span>
+              <span role="cell">
+                <ParameterChip parameter="Deadline" type="select" icon={<Icon name="date" />} value={r.date} state={r.state} />
+              </span>
+              <span role="cell">
+                <ParameterChip parameter="Deadline" type="select" icon={<Icon name="date" />} value={r.date} state={r.state} open />
+              </span>
+            </>
+          )}
         </div>
       ))}
     </div>
@@ -274,7 +291,7 @@ function StateMatrix() {
 function StaticEditing({ value }: { value: string }) {
   const [editing, setEditing] = useState(false)
   return editing ? (
-    <ParameterChip parameter="Example" icon={<Icon name="amount" />} value={value} editing onConfirm={() => setEditing(false)} onCancel={() => setEditing(false)} />
+    <ParameterChip parameter="Amount" type="input" icon={<Icon name="amount" />} value={value} editing onConfirm={() => setEditing(false)} onCancel={() => setEditing(false)} />
   ) : (
     <button className="ghost" onClick={() => setEditing(true)}>
       Show editing

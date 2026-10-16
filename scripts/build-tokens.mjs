@@ -10,7 +10,8 @@
  *   - Primitives and Component tokens go in :root. Semantic tokens whose value is the same in every
  *     mode go in :root once; the others go in [data-theme="light"] (also :root) and [data-theme="dark"].
  *   - Text styles become .text-<name> classes; effect styles become --effect-<name>-* custom properties.
- *   - Code-only additions are listed in CODE_ONLY and marked in the output.
+ *   - Code-only additions are listed in CODE_ONLY and marked in the output:
+ *     tabular figures, and the Reduce Transparency fallback (glass fills → solid surface, blur → 0).
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -19,7 +20,11 @@ const root = new URL('..', import.meta.url)
 const data = JSON.parse(readFileSync(new URL('tokens/figma-tokens.json', root), 'utf8'))
 
 // Not in Figma: OpenType features cannot be read from Figma text styles.
-const CODE_ONLY = { tabularNums: ['label/md'] }
+const CODE_ONLY = {
+  tabularNums: ['display/amount', 'label/md'],
+  // Usage rule in Figma (03 Foundations): with Reduce Transparency on, glass becomes solid.
+  reduceTransparency: { fills: 'color/glass/fill-', solid: 'color/surface/raised' },
+}
 
 const slug = (name) => name.replace(/[\/\s.]+/g, '-').toLowerCase()
 const isOpacity = (v) => v.scopes.includes('OPACITY') || v.name.startsWith('opacity/')
@@ -66,6 +71,10 @@ const tokensCss = [
   ]).flat(),
   `/* Tier 3 · Component · ${data.source.config.componentPrefixes.join(', ')} */`,
   block(':root', comp.map((v) => line(v, one(v)))),
+  '/* Code only · Reduce Transparency: every glass fill falls back to the solid raised surface */',
+  `@media (prefers-reduced-transparency: reduce) {\n${block(`  :root,\n  ${modes.map((m) => `[data-theme="${m.toLowerCase()}"]`).join(',\n  ')}`,
+    sem.filter((v) => v.name.startsWith(CODE_ONLY.reduceTransparency.fills)).map((v) => `    ${v.css}: var(${sem.find((s) => s.name === CODE_ONLY.reduceTransparency.solid).css});`),
+  ).replace(/\n}$/, '\n  }')}\n}`,
 ].join('\n\n') + '\n'
 
 const families = [...new Set(data.textStyles.map((t) => t.fontFamily))]
@@ -94,6 +103,8 @@ const stylesCss = [
       ...(shadows.length ? [`  --effect-${slug(s.name)}-shadow: ${shadows.map(shadow).join(', ')};`] : []),
     ]
   })),
+  '/* Code only · Reduce Transparency: no blur behind glass */',
+  `@media (prefers-reduced-transparency: reduce) {\n${block('  :root', data.effectStyles.filter((s) => s.effects.some((e) => e.type === 'BACKGROUND_BLUR')).map((s) => `    --effect-${slug(s.name)}-blur: 0px;`)).replace(/\n}$/, '\n  }')}\n}`,
   ...data.effectStyles.map((s) =>
     block(`.effect-${slug(s.name)}`, [
       `  -webkit-backdrop-filter: blur(var(--effect-${slug(s.name)}-blur));`,

@@ -10,19 +10,33 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "figma:publish": "figma connect publish",
-    "figma:unpublish": "figma connect unpublish"
+    "figma:unpublish": "figma connect unpublish",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.5.1",
     "@figma/code-connect": "2.0.2",
-    "@types/node": "20.17.6",
+    "@storybook/addon-a11y": "^10.6.2",
+    "@storybook/addon-designs": "^11.1.4",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/addon-mcp": "^10.6.2",
+    "@storybook/addon-vitest": "^10.6.2",
+    "@storybook/react-vite": "^10.6.2",
+    "@types/node": "20.19.43",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.7.0",
+    "@vitest/browser-playwright": "^4",
+    "@vitest/coverage-v8": "^4",
+    "playwright": "latest",
+    "storybook": "^10.6.2",
     "typescript": "5.6.3",
-    "vite": "5.4.21"
+    "vite": "7.3.7",
+    "vitest": "^4"
   }
 }

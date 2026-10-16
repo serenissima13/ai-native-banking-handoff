@@ -1,0 +1,33 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introduction" />
+
+# AI-native mobile banking · design-to-code handoff
+
+This Storybook is the handoff for the **ParameterChip** from the WIT Software design challenge — built in
+React + TypeScript from the Figma design system and mapped back to Figma with **Code Connect**.
+
+> A ParameterChip is a value the assistant took from the person's own words — _said_, _assumed_, _missing_,
+> _calculated_ or _edited_ — shown where it was understood and editable in place.
+
+## How to read this Storybook
+
+The sidebar mirrors the Figma file's own pages, in the same order:
+
+- **Foundations** — the three token tiers (Primitives → Semantic → Component), colour, typography,
+  spacing/radius/size and glass & elevation. Every example on that page renders through the generated
+  CSS custom properties, so switching the **Theme** toolbar above (Dark/Light) updates them live —
+  there are no separate Dark/Light stories anywhere in this Storybook.
+- **Components** — Icon and ParameterChip, one story per Figma variant, plus a Docs page with the
+  component's props, anatomy and accessibility notes.
+- **Patterns** — the "Understanding" demo: the chips shown together the way the final journey uses them,
+  the same code that ships to the live demo below.
+
+Component stories tagged **Figma** in their toolbar (via the Figma add-on) link straight to the matching
+node in the file, so you can flip between the design and the implementation without leaving the browser.
+
+## Links
+
+- **Figma file:** [AI-native mobile banking](https://www.figma.com/design/oYKI1xZAtJvaO62wPJhN8L/AI-native-mobile-banking?node-id=31-123) · page 04 Components › Chip / ParameterChip
+- **Live demo:** [serenissima13.github.io/ai-native-banking-handoff](https://serenissima13.github.io/ai-native-banking-handoff/)
+- **Repository:** [github.com/serenissima13/ai-native-banking-handoff](https://github.com/serenissima13/ai-native-banking-handoff) — see `README.md` for the token pipeline and `docs/HANDOFF.md` for the full handoff spec

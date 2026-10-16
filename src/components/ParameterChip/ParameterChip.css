@@ -136,11 +136,20 @@ button.pchip:active { --_bg: var(--parameter-chip-bg-pressed); }
   place-items: center;
   /* 32 px: what is left of the 44 px chip after the nested inset on both sides */
   --_size: calc(var(--parameter-chip-height-min) - 2 * var(--parameter-chip-padding-right-editing));
+  position: relative;
   width: var(--_size);
   height: var(--_size);
   border: 0;
   border-radius: var(--radius-full);
   cursor: pointer;
+}
+/* Hit area: the full 44 px height of the chip (size/touch-target-min). Sideways it reaches only to the
+   middle of the gap between the two buttons (4 px), so the targets never overlap: 40 × 44. */
+.pchip__clear::before,
+.pchip__confirm::before {
+  content: '';
+  position: absolute;
+  inset: calc((var(--_size) - var(--size-touch-target-min)) / 2) calc(var(--parameter-chip-gap) / -2);
 }
 .pchip__clear {
   background: transparent;

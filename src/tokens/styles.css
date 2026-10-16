@@ -9,6 +9,15 @@
   --font-family-base: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+.text-display-amount {
+  font-family: var(--font-family-base);
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; /* code only: tabular figures for amounts */
+}
+
 .text-label-md {
   font-family: var(--font-family-base);
   font-weight: 500;
@@ -33,6 +42,16 @@
   --effect-glass-regular-shadow: inset 0px 1px 0px 0px var(--color-glass-highlight), 0px 8px 32px 0px var(--color-glass-shadow);
   --effect-glass-thick-blur: 40px;
   --effect-glass-thick-shadow: inset 0px 1px 0px 0px var(--color-glass-highlight), 0px 16px 48px 0px var(--color-glass-shadow);
+}
+
+/* Code only · Reduce Transparency: no blur behind glass */
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --effect-glass-thin-blur: 0px;
+    --effect-glass-regular-blur: 0px;
+    --effect-glass-thick-blur: 0px;
+  }
 }
 
 .effect-glass-thin {

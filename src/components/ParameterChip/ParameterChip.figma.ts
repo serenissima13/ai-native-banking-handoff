@@ -8,7 +8,14 @@ const instance = figma.selectedInstance
 const value = instance.getString('Value')
 const placeholder = instance.getString('Placeholder')
 
-// VARIANT · State — every value mapped
+// VARIANT · Type — how the value is changed. Read-only only exists with State=Output, which needs no type.
+const type = instance.getEnum('Type', {
+  Input: 'input',
+  Select: 'select',
+  'Read-only': '',
+})
+
+// VARIANT · State — where the value came from; every value mapped
 const state = instance.getEnum('State', {
   Confirmed: 'confirmed',
   Assumed: 'assumed',
@@ -17,7 +24,8 @@ const state = instance.getEnum('State', {
   Edited: 'edited',
 })
 
-// VARIANT · Interaction — Pressed and Focused are runtime CSS states (:active, :focus-visible), not props
+// VARIANT · Interaction — what is happening now. Pressed and Focused are runtime CSS states
+// (:active, :focus-visible), not props. Open exists only with Type=Select, Editing only with Type=Input.
 const open = instance.getEnum('Interaction', {
   Default: false,
   Pressed: false,
@@ -49,6 +57,7 @@ if (iconInstance && iconInstance.type === 'INSTANCE') {
 export default {
   example: figma.tsx`<ParameterChip
   parameter="${parameter}"
+  ${type ? figma.tsx`type="${type}"` : ''}
   state="${state}"
   ${state === 'missing' ? figma.tsx`placeholder="${placeholder}"` : figma.tsx`value="${value}"`}
   ${iconCode ? figma.tsx`icon={${iconCode}}` : ''}

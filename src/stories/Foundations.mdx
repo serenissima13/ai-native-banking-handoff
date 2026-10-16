@@ -1,0 +1,87 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DocsTheme } from './foundations/DocsTheme'
+import { ColorRamp, SemanticColorGroups } from './foundations/ColorSwatches'
+import { TypeSamples } from './foundations/TypeSamples'
+import { BarScale, RadiusScale, BorderWidthScale } from './foundations/ScaleSamples'
+import { GlassSamples } from './foundations/GlassSamples'
+
+<Meta title="Foundations" />
+
+<DocsTheme />
+
+# Foundations
+
+Mirrors Figma page **03 Foundations**. Every example below renders through the generated CSS
+(`src/tokens/tokens.css` and `styles.css`) or reads straight from `tokens/figma-tokens.json` — nothing
+on this page is a hand-typed colour, size or font value. Switch the **Theme** toolbar above to see
+Light and Dark; nothing here duplicates a story to show both.
+
+## Tokens: three tiers
+
+**Primitives** → raw values with no meaning of their own (`color/ink/500`, `space/16`). **Semantic** →
+what the value is *for*, in Light and Dark (`color/text/primary`, `space/md`) — most Semantic tokens
+alias a Primitive. **Component** → one component's own names, aliasing Semantic (`parameter-chip/confirmed/bg`).
+A chain from the ParameterChip itself: `parameter-chip/confirmed/bg` → `color/surface/brand-subtle` →
+`color/ion/50` (Light) or `color/ion/950` (Dark). Nothing about Light or Dark is written in the
+component's own CSS — it only ever reaches for the Component tier.
+
+## Colour
+
+### Primitives — Ink, Ion, Aura
+
+Ink is the neutral ramp (text, surfaces, borders in both modes); Ion is the brand colour; Aura is the
+assistant's own colour, used for AI surfaces and the "assumed" affordances.
+
+**Ink**
+
+<ColorRamp family="ink" />
+
+**Ion**
+
+<ColorRamp family="ion" />
+
+**Aura**
+
+<ColorRamp family="aura" />
+
+### Semantic
+
+Every Semantic colour token, grouped the way Figma groups them. These swatches are `var(--color-*)` —
+they are already showing whichever mode the toolbar above is set to.
+
+<SemanticColorGroups />
+
+## Typography
+
+<TypeSamples />
+
+## Spacing, radius & size
+
+**Spacing** (`space/*`, the Semantic scale components use — e.g. `--parameter-chip-gap` is `space/xs`)
+
+<BarScale prefix="space" />
+
+**Size** (`size/*` — icon sizes and the 44 px minimum touch target)
+
+<BarScale prefix="size" />
+
+**Radius**
+
+<RadiusScale />
+
+**Border width**
+
+<BorderWidthScale />
+
+## Glass & elevation
+
+Three effect styles — `glass/thin`, `glass/regular`, `glass/thick` — each a background blur plus an
+inset highlight and a drop shadow, all three colours of which are themselves tokens
+(`color/glass/highlight`, `color/glass/shadow`). `glass/thin` is what ParameterChip uses for its
+Assumed and Missing states.
+
+<GlassSamples />
+
+With **Reduce Transparency** on, every glass fill falls back to the solid `color/surface/raised` and
+the blur drops to `0` — generated once, in `tokens.css`'s `@media (prefers-reduced-transparency: reduce)`
+block, so no component codes the fallback itself.
