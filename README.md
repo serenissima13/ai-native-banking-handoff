@@ -17,7 +17,7 @@ The **ParameterChip** from the WIT Software design challenge, built in React + T
 | `scripts/build-tokens.mjs` | JSON → CSS. Names from each variable's code syntax; the only rules it applies are written at the top. |
 | `src/components/ParameterChip/` | The component, its CSS (tokens only) and its Code Connect template. |
 | `src/components/Icon/` | The icons the chip uses, exported from Figma as SVG, with one Code Connect template per leading icon. |
-| `src/App.tsx` | The live demo: screen 02 "What I understood" inside a simple phone (the 402 × 874 Figma frame), in Dark and Light; on a real phone the frame steps aside. The screen itself is `src/patterns/WhatIUnderstood.tsx`. Every state, specs and tests are in Storybook. |
+| `src/App.tsx` | The live demo of **ParameterChip**: what it is, its three properties (Type · State · Interaction) and a live readout of the props of each chip on the phone. The phone shows screen 02 "What I understood" (`src/patterns/WhatIUnderstood.tsx`) only as context. Every state, specs and tests are in Storybook. |
 | `figma.config.json` | Code Connect configuration. |
 
 ## Run it

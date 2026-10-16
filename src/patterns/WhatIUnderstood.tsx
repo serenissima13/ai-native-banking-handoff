@@ -30,7 +30,16 @@ const euro = (n: number) =>
 const parseAmount = (text: string) => Number(text.replace(/[^\d.]/g, '')) || 0
 const perMonth = (amount: number, months: number) => Math.ceil(amount / months)
 
-export function WhatIUnderstood() {
+/** What each chip on the screen is right now — the props it is rendered with. Used by the demo's inspector. */
+export interface ChipSnapshot {
+  parameter: string
+  type: 'input' | 'select'
+  state: ParameterChipState
+  interaction: 'rest' | 'open' | 'editing'
+  value: string
+}
+
+export function WhatIUnderstood({ onChange }: { onChange?: (chips: ChipSnapshot[]) => void } = {}) {
   const [amount, setAmount] = useState({ value: 3000, state: 'confirmed' as ParameterChipState, editing: false })
   const [when, setWhen] = useState({ date: ASSUMED, state: 'assumed' as ParameterChipState })
   const [menuOpen, setMenuOpen] = useState(false)
@@ -39,6 +48,14 @@ export function WhatIUnderstood() {
 
   const months = deadlines.find((d) => d.date === when.date)?.months ?? 9
   const monthly = perMonth(amount.value, months)
+  const whenValue = `${when.date} · ${months} months`
+
+  useEffect(() => {
+    onChange?.([
+      { parameter: 'Amount', type: 'input', state: amount.state, interaction: amount.editing ? 'editing' : 'rest', value: euro(amount.value) },
+      { parameter: 'When', type: 'select', state: when.state, interaction: menuOpen ? 'open' : 'rest', value: whenValue },
+    ])
+  }, [onChange, amount, when, menuOpen, whenValue])
 
   return (
     <div className="wiu">
@@ -106,7 +123,7 @@ export function WhatIUnderstood() {
               <ParameterChip
                 parameter="When"
                 type="select"
-                value={`${when.date} · ${months} months`}
+                value={whenValue}
                 state={when.state}
                 open={menuOpen}
                 onPress={() => setMenuOpen(!menuOpen)}
